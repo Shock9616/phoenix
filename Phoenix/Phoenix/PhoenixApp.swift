@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct PhoenixApp: App {
+    @StateObject var gameViewModel = GameViewModel()
+
     var body: some Scene {
         WindowGroup {
-            PhoenixRootView()
+            PhoenixRootView(viewModel: gameViewModel)
         }
     }
 }
