@@ -37,4 +37,5 @@ struct PhoenixRootView: View {
 
 #Preview {
     PhoenixRootView(viewModel: GameViewModel())
+        .frame(width: 800, height: 600)
 }
