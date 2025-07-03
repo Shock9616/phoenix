@@ -11,6 +11,12 @@ import SwiftUI
 struct PhoenixApp: App {
     @StateObject var gameViewModel = GameViewModel()
 
+    private let logger = AppEnvironment.logger
+
+    init() {
+        StartupLogger.logAppLaunchInfo(using: logger)
+    }
+
     var body: some Scene {
         WindowGroup {
             PhoenixRootView(viewModel: gameViewModel)

@@ -13,6 +13,12 @@ internal import Combine
 class GameViewModel: ObservableObject {
     @Published private var gameModel = GameModel()
 
+    private let logger: Logging
+
+    init(logger: Logging = AppEnvironment.logger) {
+        self.logger = logger
+    }
+
     var games: [Game] {
         gameModel.games
     }
@@ -82,6 +88,7 @@ class GameViewModel: ObservableObject {
         guard let iconPath = selectedGame?.icon,
               let icon = loadImage(filePath: iconPath)
         else {
+            logger.log("Using placeholder icon for \(selectedGameName ?? "Unknown Game")", level: .info)
             return Image("PlaceholderIcon")
         }
         return Image(nsImage: icon)
@@ -91,6 +98,7 @@ class GameViewModel: ObservableObject {
         guard let headerPath = selectedGame?.header,
               let header = loadImage(filePath: headerPath)
         else {
+            logger.log("Using placeholder header image for \(selectedGameName ?? "Unknown Game")", level: .info)
             return Image("PlaceholderImage")
         }
         return Image(nsImage: header)
@@ -100,6 +108,7 @@ class GameViewModel: ObservableObject {
         guard let coverPath = selectedGame?.cover,
               let cover = loadImage(filePath: coverPath)
         else {
+            logger.log("Using placeholder cover image for \(selectedGameName ?? "Unknown Game")", level: .info)
             return Image("PlaceholderImage")
         }
         return Image(nsImage: cover)
@@ -109,8 +118,14 @@ class GameViewModel: ObservableObject {
         var screenshots: [Image] = []
         guard let screenshotPaths = selectedGame?.screenshots else { return screenshots }
         for path in screenshotPaths {
-            guard let path = path else { continue }
-            guard let screenshot = loadImage(filePath: path) else { continue }
+            guard let path = path else {
+                logger.log("Given screenshot path doesn't exist for \(selectedGameName ?? "Unknown Game")", level: .warning)
+                continue
+            }
+            guard let screenshot = loadImage(filePath: path) else {
+                logger.log("Error loading screenshot for \(selectedGameName ?? "Unknown Game")", level: .error)
+                continue
+            }
             screenshots.append(Image(nsImage: screenshot))
         }
         return screenshots
@@ -181,7 +196,7 @@ class GameViewModel: ObservableObject {
 
         // Developer
         if let developer = selectedGameDeveloper {
-            metadata.append(("Developer", "developer"))
+            metadata.append(("Developer", developer))
         }
 
         // Publishers
@@ -217,5 +232,6 @@ class GameViewModel: ObservableObject {
     /// - ids: The set of UUIDs to send to the gameModel
     func selectGames(_ ids: Set<UUID>) {
         gameModel.selectedGameIDs = ids
+        logger.log("Selected game(s) \(games.filter { ids.contains($0.id) }.compactMap { $0.name })", level: .debug)
     }
 }

@@ -22,8 +22,7 @@ func loadImage(filePath: URL) -> NSImage? {
         let imageData = try Data(contentsOf: filePath)
         return NSImage(data: imageData)
     } catch {
-        print("Error loading image: \(error)")
+        AppEnvironment.logger.log("Error loading image: \(error)", level: .error)
+        return nil
     }
-
-    return nil
 }
