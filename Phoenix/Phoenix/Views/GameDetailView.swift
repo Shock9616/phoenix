@@ -22,7 +22,7 @@ struct GameDetailView: View {
         ScrollView {
             // ========== Header ==========
 
-            HeaderView(image: Image("PlaceholderImage"), height: 450)
+            HeaderView(image: viewModel.selectedGameHeader, height: 450)
 
             // ========== Content ==========
 
@@ -51,8 +51,8 @@ struct GameDetailView: View {
 
                 // ---------- Details ----------
                 HStack(alignment: .top) {
-                    DescriptionView("Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.")
-                    MetadataView()
+                    DescriptionView(viewModel.selectedGameDescription ?? "")
+                    MetadataView(viewModel.selectedGameMetadata)
                         .fixedSize(horizontal: true, vertical: false)
                 }
             }

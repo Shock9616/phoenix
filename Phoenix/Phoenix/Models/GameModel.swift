@@ -30,10 +30,10 @@ struct GameModel {
 /// in the user's library
 func loadGames() -> [Game] {
     return [
-        Game(name: "Game 1"),
-        Game(name: "Game 2", isFavorite: true),
-        Game(name: "Game 3"),
-        Game(name: "Game 4", isFavorite: true),
-        Game(name: "Game 5", isHidden: true)
+        Game(name: "Game 1", header: URL(filePath: "/Users/kalebrosborough/Desktop/catoutside.jpeg")),
+        Game(name: "Game 2", platform: "Steam", status: .playing, isFavorite: true, genres: ["Metroidvania", "Action", "Adventure"], lastPlayed: Date()),
+        Game(name: "Game 3", description: "Epic funny game lolololol", developer: "Not Epic Games"),
+        Game(name: "Game 4", isFavorite: true, releaseDate: Date()),
+        Game(name: "Game 5", isHidden: true, lastPlayed: Date())
     ]
 }

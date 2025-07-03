@@ -16,12 +16,18 @@ struct PhoenixRootView: View {
     @ObservedObject var viewModel: GameViewModel
 
     private var selectedGameName: String {
-        if let selectedID = viewModel.selectedGameIDs.first,
-           let selectedGame = viewModel.games.first(where: { $0.id == selectedID }),
-           let name = selectedGame.name
+        if viewModel.selectedGameIDs.count > 1 {
+            // If multiple games are selected
+            return "Games"
+        } else if let selectedID = viewModel.selectedGameIDs.first,
+                  let selectedGame = viewModel.games.first(where: { $0.id == selectedID }),
+                  let name = selectedGame.name
         {
+            // If one game is selected
             return name
         }
+
+        // If no games are selected
         return "Phoenix"
     }
 
@@ -29,9 +35,15 @@ struct PhoenixRootView: View {
         NavigationSplitView {
             GameListView(viewModel: viewModel)
         } detail: {
-            GameDetailView(viewModel: viewModel)
-                .navigationTitle(selectedGameName)
+            if viewModel.selectedGameIDs.count == 1 {
+                // If one game is selected
+                GameDetailView(viewModel: viewModel)
+            } else if viewModel.selectedGameIDs.count > 1 {
+                // If multiple games are selected
+                MultipleGamesView(viewModel: viewModel)
+            }
         }
+        .navigationTitle(selectedGameName)
     }
 }
 

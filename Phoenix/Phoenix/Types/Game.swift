@@ -23,7 +23,7 @@ struct Game: Identifiable {
     var isFavorite: Bool = false
 
     // Launcher functionality
-    var gameFile: URL?
+    var gameExecutable: URL?
     var launcher: String?
 
     // Images

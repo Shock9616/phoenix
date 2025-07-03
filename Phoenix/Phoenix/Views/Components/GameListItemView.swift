@@ -21,17 +21,13 @@ struct GameListItemView: View {
                 .resizable()
                 .frame(width: 20, height: 20)
 
-            if let name = game.name {
-                Text(name)
-            } else {
-                Text("Unnamed")
-            }
+            Text(game.name ?? "Unnamed")
         }
     }
 
     var gameIcon: Image {
-        if let icon = game.icon, let iconData = loadImage(filePath: icon) {
-            Image(nsImage: iconData)
+        if let iconPath = game.icon, let icon = loadImage(filePath: iconPath) {
+            Image(nsImage: icon)
         } else {
             // Use the placeholder icon if there is a problem
             Image("PlaceholderIcon")

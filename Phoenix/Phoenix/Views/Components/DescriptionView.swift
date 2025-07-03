@@ -20,11 +20,12 @@ struct DescriptionView: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
             Text(content)
                 .padding()
+                .font(.system(size: 14.5))
         }
     }
 }

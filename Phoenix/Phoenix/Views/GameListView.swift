@@ -23,24 +23,18 @@ struct GameListView: View {
     var body: some View {
         List(selection: $selectedIDs) {
             // Favorite games at the top
-            let favoriteGames = viewModel.games.filter {
-                !$0.isHidden && $0.isFavorite
-            }
-            if !favoriteGames.isEmpty {
+            if !viewModel.favoriteGames.isEmpty {
                 Section(header: Text("Favorites")) {
-                    ForEach(favoriteGames, id: \.id) { game in
+                    ForEach(viewModel.favoriteGames, id: \.id) { game in
                         GameListItemView(game: game)
                     }
                 }
             }
 
             // Other games below
-            let otherGames = viewModel.games.filter {
-                !$0.isHidden && !$0.isFavorite
-            }
-            if !otherGames.isEmpty {
+            if !viewModel.otherGames.isEmpty {
                 Section(header: Text("Other Games")) {
-                    ForEach(otherGames, id: \.id) { game in
+                    ForEach(viewModel.otherGames, id: \.id) { game in
                         GameListItemView(game: game)
                     }
                 }
@@ -52,7 +46,7 @@ struct GameListView: View {
         }
         .onChange(of: selectedIDs) {
             // Send newly selected games to the view model
-            viewModel.selectGame(selectedIDs)
+            viewModel.selectGames(selectedIDs)
         }
     }
 }

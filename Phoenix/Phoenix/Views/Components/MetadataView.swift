@@ -9,13 +9,22 @@ import SwiftUI
 
 /// A custom view for displaying the metadata of the selected game
 struct MetadataView: View {
+    private let metadata: [(String, String)]
+
+    init(_ metadata: [(String, String)]) {
+        self.metadata = metadata
+    }
+
     var body: some View {
         ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 5)
                 .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
-            VStack {
-                MetadataSectionView(section: "Last Played", value: "December 9, 2024")
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(metadata, id: \.0) { section, value in
+                    MetadataSectionView(section: section, value: value)
+                }
             }
+            .font(.system(size: 14.5))
             .padding()
         }
     }
