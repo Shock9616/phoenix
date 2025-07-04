@@ -16,7 +16,7 @@ struct Game: Identifiable {
     
     // Sorting
     var name: String?
-    var platform: Platform
+    var platform: Platform = .other
     var status: Status = .none
     var recency: Recency = .never
     var isHidden: Bool = false

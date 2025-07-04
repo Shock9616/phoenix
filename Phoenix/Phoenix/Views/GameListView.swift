@@ -22,7 +22,7 @@ struct GameListView: View {
 
     var body: some View {
         List(selection: $selectedIDs) {
-            ForEach(viewModel.groupedGames) { section in
+            ForEach(viewModel.displaySections) { section in
                 Section(header: Text("\(section.title) (\(section.games.count))")) {
                     ForEach(section.games) { game in
                         GameListItemView(game: game)
@@ -38,6 +38,7 @@ struct GameListView: View {
             // Send newly selected games to the view model
             viewModel.selectGames(selectedIDs)
         }
+        .searchable(text: $viewModel.searchText, placement: .sidebar, prompt: "Search")
     }
 }
 

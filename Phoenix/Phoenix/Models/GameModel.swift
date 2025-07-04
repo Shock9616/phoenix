@@ -106,6 +106,6 @@ func loadGames() -> [Game] {
             lastPlayed: formatter.date(from: "07/29/2024"),
             developers: ["MercurySteam", "Nintendo EPD"],
             publishers: ["Nintendo"]
-        ),
+        )
     ]
 }

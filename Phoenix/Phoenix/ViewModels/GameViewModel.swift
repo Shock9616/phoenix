@@ -12,6 +12,7 @@ internal import Combine
 /// backend
 class GameViewModel: ObservableObject {
     @Published private var gameModel = GameModel()
+    @Published var searchText: String = ""
 
     private var sortMode: SortMode = .platform
 
@@ -271,6 +272,31 @@ class GameViewModel: ObservableObject {
         }
 
         return sections
+    }
+
+    // Filtering via the search box rather than categories
+    var filteredGames: [GameSection] {
+        if searchText.isEmpty {
+            return groupedGames
+        } else {
+            let visibleGames = games.filter { !$0.isHidden }
+
+            return [GameSection(
+                title: "Search Results",
+                games: visibleGames
+                    .filter {
+                        ($0.name ?? "").localizedCaseInsensitiveContains(searchText)
+                    }
+            )]
+        }
+    }
+
+    var displaySections: [GameSection] {
+        if searchText.isEmpty {
+            return groupedGames
+        } else {
+            return filteredGames
+        }
     }
 
     // MARK: - Intents
