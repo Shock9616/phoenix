@@ -52,6 +52,7 @@ struct GameDetailView: View {
                 // ---------- Details ----------
                 HStack(alignment: .top) {
                     DescriptionView(viewModel.selectedGameDescription ?? "")
+                        .fixedSize(horizontal: false, vertical: true)
                     MetadataView(viewModel.selectedGameMetadata)
                         .fixedSize(horizontal: true, vertical: false)
                 }

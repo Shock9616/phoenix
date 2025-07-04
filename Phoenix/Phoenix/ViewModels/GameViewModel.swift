@@ -13,6 +13,8 @@ internal import Combine
 class GameViewModel: ObservableObject {
     @Published private var gameModel = GameModel()
 
+    private var sortMode: SortMode = .platform
+
     private let logger: Logging
 
     init(logger: Logging = AppEnvironment.logger) {
@@ -49,8 +51,8 @@ class GameViewModel: ObservableObject {
         return name
     }
 
-    var selectedGamePlatform: String? {
-        guard let platform = selectedGame?.platform else { return nil }
+    var selectedGamePlatform: Platform {
+        guard let platform = selectedGame?.platform else { return Platform.other }
         return platform
     }
 
@@ -156,12 +158,12 @@ class GameViewModel: ObservableObject {
         return date
     }
 
-    var selectedGameDeveloper: String? {
-        guard let developer = selectedGame?.developer else { return nil }
-        return developer
+    var selectedGameDevelopers: [String] {
+        guard let developers = selectedGame?.developers else { return [] }
+        return developers
     }
 
-    var selectedGamePublishers: [String?] {
+    var selectedGamePublishers: [String] {
         guard let publishers = selectedGame?.publishers else { return [] }
         return publishers
     }
@@ -181,9 +183,7 @@ class GameViewModel: ObservableObject {
         }
 
         // Platform
-        if let platform = selectedGamePlatform {
-            metadata.append(("Platform", platform))
-        }
+        metadata.append(("Platform", selectedGamePlatform.displayName))
 
         // Status
         metadata.append(("Status", selectedGameStatus.displayName))
@@ -194,9 +194,10 @@ class GameViewModel: ObservableObject {
             metadata.append(("Genres", genres.joined(separator: "\n")))
         }
 
-        // Developer
-        if let developer = selectedGameDeveloper {
-            metadata.append(("Developer", developer))
+        // Developers
+        let developers = selectedGameDevelopers.compactMap { $0 }
+        if !developers.isEmpty {
+            metadata.append(("Developers", developers.joined(separator: "\n")))
         }
 
         // Publishers
@@ -215,13 +216,61 @@ class GameViewModel: ObservableObject {
     }
 
     // Filtering for game list
+    var groupedGames: [GameSection] {
+        let visibleGames = games.filter { !$0.isHidden }
 
-    var favoriteGames: [Game] {
-        games.filter { !$0.isHidden && $0.isFavorite }
-    }
+        let favoriteGames = visibleGames
+            .filter { $0.isFavorite }
+            .sorted { ($0.name ?? "") < ($1.name ?? "") }
 
-    var otherGames: [Game] {
-        games.filter { !$0.isHidden && !$0.isFavorite }
+        var sections: [GameSection] = []
+
+        if !favoriteGames.isEmpty {
+            sections.append(GameSection(title: "Favorites", games: favoriteGames))
+        }
+
+        let nonFavoriteGames = visibleGames.filter { !$0.isFavorite }
+
+        switch sortMode {
+            case .platform:
+                let platformGroups = Dictionary(grouping: nonFavoriteGames) { $0.platform }
+
+                let sortedPlatforms = platformGroups.keys.sorted()
+
+                for platform in sortedPlatforms {
+                    if let gamesForPlatform = platformGroups[platform] {
+                        let sortedGames = gamesForPlatform.sorted { ($0.name ?? "") < ($1.name ?? "") }
+                        sections.append(GameSection(title: platform.displayName, games: sortedGames))
+                    }
+                }
+            case .status:
+                let statusGroups = Dictionary(grouping: nonFavoriteGames) { $0.status }
+
+                let sortedStatuses = statusGroups.keys.sorted()
+
+                for status in sortedStatuses {
+                    if let gamesForStatus = statusGroups[status] {
+                        let sortedGames = gamesForStatus.sorted { ($0.name ?? "") < ($1.name ?? "") }
+                        sections.append(GameSection(title: status.displayName, games: sortedGames))
+                    }
+                }
+            case .name:
+                let sortedGames = nonFavoriteGames.sorted { ($0.name ?? "") < ($1.name ?? "") }
+                sections.append(GameSection(title: "Games", games: sortedGames))
+            case .recency:
+                let recencyGroups = Dictionary(grouping: nonFavoriteGames) { $0.recency }
+
+                let sortedRecencies = recencyGroups.keys.sorted()
+
+                for recency in sortedRecencies {
+                    if let gamesForRecency = recencyGroups[recency] {
+                        let sortedGames = gamesForRecency.sorted { ($0.name ?? "") < ($1.name ?? "") }
+                        sections.append(GameSection(title: recency.displayName, games: sortedGames))
+                    }
+                }
+        }
+
+        return sections
     }
 
     // MARK: - Intents

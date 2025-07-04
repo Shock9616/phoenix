@@ -22,19 +22,9 @@ struct GameListView: View {
 
     var body: some View {
         List(selection: $selectedIDs) {
-            // Favorite games at the top
-            if !viewModel.favoriteGames.isEmpty {
-                Section(header: Text("Favorites")) {
-                    ForEach(viewModel.favoriteGames, id: \.id) { game in
-                        GameListItemView(game: game)
-                    }
-                }
-            }
-
-            // Other games below
-            if !viewModel.otherGames.isEmpty {
-                Section(header: Text("Other Games")) {
-                    ForEach(viewModel.otherGames, id: \.id) { game in
+            ForEach(viewModel.groupedGames) { section in
+                Section(header: Text("\(section.title) (\(section.games.count))")) {
+                    ForEach(section.games) { game in
                         GameListItemView(game: game)
                     }
                 }
