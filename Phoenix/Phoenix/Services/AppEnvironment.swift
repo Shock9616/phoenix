@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Global environment struct for holding app-wide dependencies such
+/// as logging
 enum AppEnvironment {
     static let logger: Logging = {
         #if DEBUG

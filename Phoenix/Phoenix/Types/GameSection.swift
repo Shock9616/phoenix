@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A generic section that displays games in GameListView
 struct GameSection: Identifiable {
     var id: String { title }
     let title: String

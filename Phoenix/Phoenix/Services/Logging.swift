@@ -15,15 +15,24 @@ enum LogLevel: String {
 }
 
 protocol Logging {
+    /// Print log messages to the debug console
+    ///
+    /// - Parameters:
+    /// - message: The message to print to the console
+    /// - level: The level of importance of the message
     func log(_ message: String, level: LogLevel)
 }
 
+/// A simple logger for printing verbose log messages to the Xcode
+/// debug console while testing
 struct ConsoleLogger: Logging {
     func log(_ message: String, level: LogLevel) {
         print("[\(level.rawValue)] \(message)")
     }
 }
 
+/// A logger for writting logs to a dedicated log file in a release
+/// environment
 struct FileLogger: Logging {
     private let logFileURL: URL
 
@@ -45,6 +54,8 @@ struct FileLogger: Logging {
     }
 }
 
+/// A logger dedicated to printing system information at application
+/// start
 enum StartupLogger {
     static func logAppLaunchInfo(using logger: Logging) {
         let date = ISO8601DateFormatter().string(from: Date())

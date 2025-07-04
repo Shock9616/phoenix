@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// An enum containing the various supported methods of sorting games
+/// in the game list
 enum SortMode {
     case platform
     case status

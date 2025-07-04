@@ -22,9 +22,9 @@ struct GameListView: View {
 
     var body: some View {
         List(selection: $selectedIDs) {
-            ForEach(viewModel.displaySections) { section in
+            ForEach(viewModel.displaySections) { section in // Sections
                 Section(header: Text("\(section.title) (\(section.games.count))")) {
-                    ForEach(section.games) { game in
+                    ForEach(section.games) { game in // Games in each section
                         GameListItemView(game: game)
                     }
                 }

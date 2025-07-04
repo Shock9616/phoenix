@@ -22,14 +22,17 @@ class GameViewModel: ObservableObject {
         self.logger = logger
     }
 
+    /// The full list of the user's games
     var games: [Game] {
         gameModel.games
     }
 
+    /// A set containing the IDs of all currently selected games
     var selectedGameIDs: Set<UUID> {
         gameModel.selectedGameIDs
     }
 
+    /// The first selected game
     var selectedGame: Game? {
         guard let selectedID = selectedGameIDs.first else { return nil }
         return games.first { $0.id == selectedID }
@@ -37,56 +40,67 @@ class GameViewModel: ObservableObject {
 
     // Comptued properties to handle unwrapping optional chains for the UI
 
+    /// The Steam ID of the first selected game
     var selectedGameSteamID: Int? {
         guard let steamID = selectedGame?.steamID else { return nil }
         return steamID
     }
 
+    /// The IGDB ID of the first selected game
     var selectedGameIgdbID: Int? {
         guard let igdbID = selectedGame?.igdbID else { return nil }
         return igdbID
     }
 
+    /// The name of the first selected game
     var selectedGameName: String? {
         guard let name = selectedGame?.name else { return nil }
         return name
     }
 
+    /// The platform of the first selected game
     var selectedGamePlatform: Platform {
         guard let platform = selectedGame?.platform else { return Platform.other }
         return platform
     }
 
+    /// The status of the first selected game
     var selectedGameStatus: Status {
         guard let status = selectedGame?.status else { return Status.none }
         return status
     }
 
+    /// The recency of the first selected game
     var selectedGameRecency: Recency {
         guard let recency = selectedGame?.recency else { return Recency.never }
         return recency
     }
 
+    /// Whether or not the first selected game is hidden
     var selectedGameHidden: Bool {
         guard let hidden = selectedGame?.isHidden else { return false }
         return hidden
     }
 
+    /// Whether or not the first selected game is a favorite
     var selectedGameFavorite: Bool {
         guard let favorite = selectedGame?.isFavorite else { return false }
         return favorite
     }
 
+    /// The URL of the first selected game's executable
     var selectedGameExecutable: URL? {
         guard let executablePath = selectedGame?.gameExecutable else { return nil }
         return executablePath
     }
 
+    /// The launcher command of the first selected game
     var selectedGameLauncher: String? {
         guard let launcher = selectedGame?.launcher else { return nil }
         return launcher
     }
 
+    /// The first selected game's icon
     var selectedGameIcon: Image {
         guard let iconPath = selectedGame?.icon,
               let icon = loadImage(filePath: iconPath)
@@ -97,6 +111,7 @@ class GameViewModel: ObservableObject {
         return Image(nsImage: icon)
     }
 
+    /// The first selected game's header image
     var selectedGameHeader: Image {
         guard let headerPath = selectedGame?.header,
               let header = loadImage(filePath: headerPath)
@@ -107,6 +122,7 @@ class GameViewModel: ObservableObject {
         return Image(nsImage: header)
     }
 
+    /// The first selected game's cover image
     var selectedGameCover: Image {
         guard let coverPath = selectedGame?.cover,
               let cover = loadImage(filePath: coverPath)
@@ -117,6 +133,8 @@ class GameViewModel: ObservableObject {
         return Image(nsImage: cover)
     }
 
+    /// The list of all screenshots associated with the first
+    /// selected game
     var selectedGameScreenshots: [Image] {
         var screenshots: [Image] = []
         guard let screenshotPaths = selectedGame?.screenshots else { return screenshots }
@@ -134,41 +152,50 @@ class GameViewModel: ObservableObject {
         return screenshots
     }
 
+    /// The description of the first selected game
     var selectedGameDescription: String? {
         guard let description = selectedGame?.description else { return nil }
         return description
     }
 
+    /// The list of genres for the first selected game
     var selectedGameGenres: [String?] {
         guard let genres = selectedGame?.genres else { return [] }
         return genres
     }
 
+    /// The user's rating (out of 5) for the first selected game
     var selectedGameRating: Double {
         guard let rating = selectedGame?.rating else { return 0.0 }
         return rating
     }
 
+    /// The release date of the first selected game
     var selectedGameReleaseDate: Date? {
         guard let date = selectedGame?.releaseDate else { return nil }
         return date
     }
 
+    /// The date the first selected game was last played
     var selectedGameLastPlayed: Date? {
         guard let date = selectedGame?.lastPlayed else { return nil }
         return date
     }
 
+    /// The list of developers of the first selected game
     var selectedGameDevelopers: [String] {
         guard let developers = selectedGame?.developers else { return [] }
         return developers
     }
 
+    /// The list of publishers of the first selected game
     var selectedGamePublishers: [String] {
         guard let publishers = selectedGame?.publishers else { return [] }
         return publishers
     }
 
+    /// A list of tuples containing the titles and values of each
+    /// metadata entry for the first selected game
     var selectedGameMetadata: [(String, String)] {
         var metadata: [(String, String)] = []
 
@@ -216,10 +243,12 @@ class GameViewModel: ObservableObject {
         return metadata
     }
 
-    // Filtering for game list
+    /// A list of GameSectionss generated based on the current
+    /// sorting setting
     var groupedGames: [GameSection] {
         let visibleGames = games.filter { !$0.isHidden }
 
+        // Always put the favorites section at the top of the list
         let favoriteGames = visibleGames
             .filter { $0.isFavorite }
             .sorted { ($0.name ?? "") < ($1.name ?? "") }
@@ -234,6 +263,7 @@ class GameViewModel: ObservableObject {
 
         switch sortMode {
             case .platform:
+                // Sort games by platform
                 let platformGroups = Dictionary(grouping: nonFavoriteGames) { $0.platform }
 
                 let sortedPlatforms = platformGroups.keys.sorted()
@@ -245,6 +275,7 @@ class GameViewModel: ObservableObject {
                     }
                 }
             case .status:
+                // Sort games by status
                 let statusGroups = Dictionary(grouping: nonFavoriteGames) { $0.status }
 
                 let sortedStatuses = statusGroups.keys.sorted()
@@ -256,9 +287,11 @@ class GameViewModel: ObservableObject {
                     }
                 }
             case .name:
+                // Sort games alphabetically by name
                 let sortedGames = nonFavoriteGames.sorted { ($0.name ?? "") < ($1.name ?? "") }
                 sections.append(GameSection(title: "Games", games: sortedGames))
             case .recency:
+                // Sort games by recency
                 let recencyGroups = Dictionary(grouping: nonFavoriteGames) { $0.recency }
 
                 let sortedRecencies = recencyGroups.keys.sorted()
@@ -274,7 +307,8 @@ class GameViewModel: ObservableObject {
         return sections
     }
 
-    // Filtering via the search box rather than categories
+    /// A list of one GameSection that contains all games that match
+    /// the contents of the search bar
     var filteredGames: [GameSection] {
         if searchText.isEmpty {
             return groupedGames
@@ -291,6 +325,8 @@ class GameViewModel: ObservableObject {
         }
     }
 
+    /// Return groupedGames if the search bar is empty, and the
+    /// search results if it isn't
     var displaySections: [GameSection] {
         if searchText.isEmpty {
             return groupedGames

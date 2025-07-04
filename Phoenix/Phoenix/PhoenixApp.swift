@@ -11,9 +11,11 @@ import SwiftUI
 struct PhoenixApp: App {
     @StateObject var gameViewModel = GameViewModel()
 
+    // Set app logger
     private let logger = AppEnvironment.logger
 
     init() {
+        // Print system info on startup
         StartupLogger.logAppLaunchInfo(using: logger)
     }
 
