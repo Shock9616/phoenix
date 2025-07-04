@@ -31,7 +31,7 @@ struct Game: Identifiable {
     var icon: URL?
     var header: URL?
     var cover: URL?
-    var screenshots: [URL?] = []
+    var screenshots: [URL] = []
     
     // Other metadata
     var description: String?

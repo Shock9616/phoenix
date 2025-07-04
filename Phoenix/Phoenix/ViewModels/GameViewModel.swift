@@ -135,21 +135,23 @@ class GameViewModel: ObservableObject {
 
     /// The list of all screenshots associated with the first
     /// selected game
-    var selectedGameScreenshots: [Image] {
-        var screenshots: [Image] = []
-        guard let screenshotPaths = selectedGame?.screenshots else { return screenshots }
-        for path in screenshotPaths {
-            guard let path = path else {
-                logger.log("Given screenshot path doesn't exist for \(selectedGameName ?? "Unknown Game")", level: .warning)
-                continue
-            }
-            guard let screenshot = loadImage(filePath: path) else {
-                logger.log("Error loading screenshot for \(selectedGameName ?? "Unknown Game")", level: .error)
-                continue
-            }
-            screenshots.append(Image(nsImage: screenshot))
-        }
+    var selectedGameScreenshots: [URL] {
+        guard let screenshots = selectedGame?.screenshots else { return [] }
         return screenshots
+//        var screenshots: [Image] = []
+//        guard let screenshotPaths = selectedGame?.screenshots else { return screenshots }
+//        for path in screenshotPaths {
+//            guard let path = path else {
+//                logger.log("Given screenshot path doesn't exist for \(selectedGameName ?? "Unknown Game")", level: .warning)
+//                continue
+//            }
+//            guard let screenshot = loadImage(filePath: path) else {
+//                logger.log("Error loading screenshot for \(selectedGameName ?? "Unknown Game")", level: .error)
+//                continue
+//            }
+//            screenshots.append(Image(nsImage: screenshot))
+//        }
+//        return screenshots
     }
 
     /// The description of the first selected game

@@ -65,10 +65,15 @@ struct GameDetailView: View {
 
                 // ---------- Details ----------
                 HStack(alignment: .top) {
-                    DescriptionView(viewModel.selectedGameDescription ?? "")
-                        .fixedSize(horizontal: false, vertical: true)
+                    VStack {
+                        DescriptionView(viewModel.selectedGameDescription ?? "")
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.bottom, 8)
+                        ImageCarouselView(images: viewModel.selectedGameScreenshots)
+                            .frame(height: 200)
+                    }
                     MetadataView(viewModel.selectedGameMetadata)
-                        .fixedSize(horizontal: true, vertical: false)
+                        .fixedSize()
                 }
             }
             .padding()
