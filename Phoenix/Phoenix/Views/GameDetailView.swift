@@ -17,6 +17,7 @@ import SwiftUI
 /// backend
 struct GameDetailView: View {
     @ObservedObject var viewModel: GameViewModel
+    @State private var gameRating: Float = 0.0
 
     var body: some View {
         ScrollView {
@@ -46,8 +47,21 @@ struct GameDetailView: View {
                     })
                     .tint(.gray)
 
+                    // Star Rating
+                    StarRatingView(rating: $gameRating)
+                        .onAppear {
+                            self.gameRating = viewModel.selectedGameRating
+                        }
+                        .onChange(of: viewModel.selectedGameIDs) {
+                            self.gameRating = viewModel.selectedGameRating
+                        }
+                        .onChange(of: gameRating) {
+                            viewModel.updateRating(gameRating)
+                        }
+
                     Spacer()
                 }
+                .offset(y: -6)
 
                 // ---------- Details ----------
                 HStack(alignment: .top) {

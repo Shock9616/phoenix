@@ -15,7 +15,7 @@ import Foundation
 /// - selectedGameIDs: A set of UUIDs that correspond to the selected
 /// games in the GameListView
 struct GameModel {
-    private(set) var games: [Game]
+    var games: [Game]
     var selectedGameIDs: Set<UUID>
     var runningGames: [Game] = []
 
@@ -47,7 +47,7 @@ func loadGames() -> [Game] {
             header: URL(filePath: "/Users/kalebrosborough/Desktop/Phoenix Data Backup/cachedImages/7F3A4920-01B2-45D2-8E1B-F4DFA57267A8_header.jpg"),
             description: "As the immortal Princess of the Underworld, you'll explore a bigger, deeper mythic world, vanquishing the forces of the Titan of Time with the full might of Olympus behind you, in a sweeping story that continually unfolds through your every setback and accomplishment. New locations, challenges, upgrade systems, and surprises await as you delve into the ever-shifting Underworld again and again.",
             genres: ["Adventure", "Indie", "Role-playing (RPG)"],
-            rating: 5.0,
+            rating: 3.5,
             releaseDate: formatter.date(from: "06/29/2024"),
             lastPlayed: formatter.date(from: "07/01/2025"),
             developers: ["Supergiant Games"],

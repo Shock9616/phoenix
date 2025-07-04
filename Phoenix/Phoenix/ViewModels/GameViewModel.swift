@@ -165,7 +165,7 @@ class GameViewModel: ObservableObject {
     }
 
     /// The user's rating (out of 5) for the first selected game
-    var selectedGameRating: Double {
+    var selectedGameRating: Float {
         guard let rating = selectedGame?.rating else { return 0.0 }
         return rating
     }
@@ -344,5 +344,17 @@ class GameViewModel: ObservableObject {
     func selectGames(_ ids: Set<UUID>) {
         gameModel.selectedGameIDs = ids
         logger.log("Selected game(s) \(games.filter { ids.contains($0.id) }.compactMap { $0.name })", level: .debug)
+    }
+
+    func updateRating(_ rating: Float) {
+        guard let selectedID = selectedGameIDs.first,
+              let index = gameModel.games.firstIndex(where: { $0.id == selectedID })
+        else {
+            return
+        }
+
+        gameModel.games[index].rating = rating
+
+        logger.log("Updated rating of \(gameModel.games[index].name ?? "Unknown Game") to \(rating)", level: .info)
     }
 }

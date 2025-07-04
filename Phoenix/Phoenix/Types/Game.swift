@@ -36,7 +36,7 @@ struct Game: Identifiable {
     // Other metadata
     var description: String?
     var genres: [String] = []
-    var rating: Double?
+    var rating: Float?
     var releaseDate: Date?
     var lastPlayed: Date?
     var developers: [String] = []
