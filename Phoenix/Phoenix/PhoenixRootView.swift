@@ -35,6 +35,7 @@ struct PhoenixRootView: View {
         NavigationSplitView {
             GameListView(viewModel: viewModel)
                 .toolbar { ToolbarView(viewModel: viewModel) }
+                .frame(minWidth: 180)
         } detail: {
             if viewModel.selectedGameIDs.count == 1 {
                 // If one game is selected
