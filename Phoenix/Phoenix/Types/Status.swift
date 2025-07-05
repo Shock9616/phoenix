@@ -8,7 +8,7 @@
 import Foundation
 
 /// An enum representing the status of a game in the user's library
-enum Status: Comparable {
+enum Status: Comparable, Identifiable, CaseIterable {
     case playing, shelved, occasional, backlog, beaten, completed, abandoned, none
 
     var id: Status { self }

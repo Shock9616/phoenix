@@ -17,6 +17,7 @@ import SwiftUI
 /// backend
 struct GameDetailView: View {
     @ObservedObject var viewModel: GameViewModel
+    @State private var formViewModel: GameFormViewModel?
     @State private var gameRating: Float = 0.0
 
     var body: some View {
@@ -50,11 +51,17 @@ struct GameDetailView: View {
                     .tint(viewModel.actionButtonState == .play ? .green : .red)
 
                     // Edit game button
-                    ControlButtonView(action: {}, label: {
+                    ControlButtonView(action: {
+                        guard let selected = viewModel.selectedGame else { return }
+                        formViewModel = GameFormViewModel(mode: .edit(existing: selected))
+                    }, label: {
                         Image(systemName: "pencil")
                             .frame(width: 40, height: 50)
                     })
                     .tint(.gray)
+                    .sheet(item: $formViewModel) { vm in
+                        GameFormView(viewModel: vm)
+                    }
 
                     // Star Rating
                     StarRatingView(rating: $gameRating)

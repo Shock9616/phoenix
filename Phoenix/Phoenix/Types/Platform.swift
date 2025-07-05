@@ -8,7 +8,7 @@
 import Foundation
 
 /// An enum representing the platform a game is for
-enum Platform: Comparable {
+enum Platform: Comparable, Identifiable, CaseIterable {
     case mac
     case steam
     case gog
