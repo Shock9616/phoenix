@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-/// The view for a list item in the sidebar which shows a game's name
-/// and icon
+/// The view for a list item in the sidebar
+///
+/// Shows the game's icon followed by the game's name
 ///
 /// - Parameters:
 /// - game: The game whose name and icon should be displayed
@@ -25,6 +26,8 @@ struct GameListItemView: View {
         }
     }
 
+    /// Get the icon image, or return a placeholder icon in the event
+    /// of a missing icon or an error
     var gameIcon: Image {
         if let iconPath = game.icon, let icon = loadImage(filePath: iconPath) {
             Image(nsImage: icon)

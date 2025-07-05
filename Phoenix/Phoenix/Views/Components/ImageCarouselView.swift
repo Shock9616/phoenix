@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+/// A view for displaying a series of screenshots
+///
+/// Presented as a horizontal ScrollView of images that fades into
+/// the background on the right
+///
+/// - Parameters:
+/// - images: A list of URLs to the images to be displayed. URLs can
+/// be for local images or links to web-hosted images
 struct ImageCarouselView: View {
     let images: [URL]
 

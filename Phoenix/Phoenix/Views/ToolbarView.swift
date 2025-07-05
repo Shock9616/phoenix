@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+/// The toolbar contents for the sidebar
+///
+/// Contains the add game button and the sorting mode picker
+///
+/// - Parameters:
+/// - viewModel: The viewModel for communicating with the app's
+/// backend
 struct ToolbarView: ToolbarContent {
     @ObservedObject var viewModel: GameViewModel
 

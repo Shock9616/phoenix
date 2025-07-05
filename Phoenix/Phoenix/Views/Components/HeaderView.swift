@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-/// A special view for the Header image that provides some subtle
-/// effects when scrolling
+/// A view for presenting a header image in the detail view
+///
+/// Presented as a full-width image that stretches if scrolled
+/// upwards, and blurs as it is scrolled downwards
 ///
 /// - Parameters:
 /// - image: The image to display as the header

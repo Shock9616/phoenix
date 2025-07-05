@@ -37,7 +37,7 @@ class GameViewModel: ObservableObject {
         return games.first { $0.id == selectedID }
     }
 
-    // Comptued properties to handle unwrapping optional chains for the UI
+    // MARK: - Selected game accessors
 
     /// The Steam ID of the first selected game
     var selectedGameSteamID: Int? {
@@ -137,20 +137,6 @@ class GameViewModel: ObservableObject {
     var selectedGameScreenshots: [URL] {
         guard let screenshots = selectedGame?.screenshots else { return [] }
         return screenshots
-//        var screenshots: [Image] = []
-//        guard let screenshotPaths = selectedGame?.screenshots else { return screenshots }
-//        for path in screenshotPaths {
-//            guard let path = path else {
-//                logger.log("Given screenshot path doesn't exist for \(selectedGameName ?? "Unknown Game")", level: .warning)
-//                continue
-//            }
-//            guard let screenshot = loadImage(filePath: path) else {
-//                logger.log("Error loading screenshot for \(selectedGameName ?? "Unknown Game")", level: .error)
-//                continue
-//            }
-//            screenshots.append(Image(nsImage: screenshot))
-//        }
-//        return screenshots
     }
 
     /// The description of the first selected game
@@ -347,6 +333,12 @@ class GameViewModel: ObservableObject {
         logger.log("Selected game(s) \(games.filter { ids.contains($0.id) }.compactMap { $0.name })", level: .debug)
     }
 
+    /// Update the rating of the currently selected game in the
+    /// gameModel
+    ///
+    /// - Parameters:
+    /// - rating: A floating-point value representing the user's
+    /// rating for the game out of 5
     func updateRating(_ rating: Float) {
         guard let selectedID = selectedGameIDs.first,
               let index = gameModel.games.firstIndex(where: { $0.id == selectedID })

@@ -41,7 +41,3 @@ struct GameListView: View {
         .searchable(text: $viewModel.searchText, placement: .sidebar, prompt: "Search")
     }
 }
-
-#Preview {
-    GameListView(viewModel: GameViewModel())
-}

@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+/// A simple view to show when multiple games are selected
+///
+/// Shows the number of selected games, and some controls for hiding
+/// and deleting those games
+///
+/// - Parameters:
+/// - viewModel: The view model for communicating with the app's
+/// backend
 struct MultipleGamesView: View {
     @ObservedObject var viewModel: GameViewModel
 

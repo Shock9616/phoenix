@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-/// A wrapper around the default `Button` for the app's control
-/// buttons (e.x. the "Play" and "Edit Game" buttons)
+/// A wrapper around the default Button for the app's control buttons
+///
+/// Adds a more prominent background to the buttons and increases
+/// the default font size of the label
 ///
 /// - Parameters:
 /// - action: a closure defining the behaviour of the button

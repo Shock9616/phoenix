@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-/// A simple text view with a background to be used for the selected
-/// game's description
+/// A custom view for displaying the description of the selected game
+///
+/// Presented as a regular Text view displayed over a rounded
+/// rectangle to differentiate it from the background
 ///
 /// - Parameters:
 /// - content: The text to be displayed

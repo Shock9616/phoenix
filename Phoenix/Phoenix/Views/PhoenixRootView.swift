@@ -15,22 +15,6 @@ import SwiftUI
 struct PhoenixRootView: View {
     @ObservedObject var viewModel: GameViewModel
 
-    private var selectedGameName: String {
-        if viewModel.selectedGameIDs.count > 1 {
-            // If multiple games are selected
-            return "Games"
-        } else if let selectedID = viewModel.selectedGameIDs.first,
-                  let selectedGame = viewModel.games.first(where: { $0.id == selectedID }),
-                  let name = selectedGame.name
-        {
-            // If one game is selected
-            return name
-        }
-
-        // If no games are selected
-        return "Phoenix"
-    }
-
     var body: some View {
         NavigationSplitView {
             GameListView(viewModel: viewModel)
@@ -46,6 +30,24 @@ struct PhoenixRootView: View {
             }
         }
         .navigationTitle(selectedGameName)
+    }
+
+    /// Get the name of the selected game, or return default names
+    /// for when multiple/no games are selected
+    private var selectedGameName: String {
+        if viewModel.selectedGameIDs.count > 1 {
+            // If multiple games are selected
+            return "Games"
+        } else if let selectedID = viewModel.selectedGameIDs.first,
+                  let selectedGame = viewModel.games.first(where: { $0.id == selectedID }),
+                  let name = selectedGame.name
+        {
+            // If one game is selected
+            return name
+        }
+
+        // If no games are selected
+        return "Phoenix"
     }
 }
 

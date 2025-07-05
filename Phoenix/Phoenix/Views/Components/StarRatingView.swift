@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-/// A simple view for displaying a rating out of 5 as a series of
-/// filled, partly filled, or unfilled stars
+/// A simple view for displaying a rating
+///
+/// Displays 5 stars that can be filled, half filled, or unfilled
+/// as appropriate for displaying the rating
 ///
 /// - Parameters
 /// - rating: A binding to a float that represents the rating to be
