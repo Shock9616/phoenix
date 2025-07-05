@@ -9,7 +9,7 @@ import Foundation
 
 /// An enum containing the various supported methods of sorting games
 /// in the game list
-enum SortMode {
+enum SortMode: CaseIterable, Identifiable {
     case platform
     case status
     case name
@@ -23,6 +23,15 @@ enum SortMode {
             case .status: return "Status"
             case .name: return "Name"
             case .recency: return "Recency"
+        }
+    }
+
+    var symbol: String {
+        switch self {
+            case .platform: return "gamecontroller"
+            case .status: return "trophy"
+            case .name: return "textformat.abc"
+            case .recency: return "clock"
         }
     }
 }

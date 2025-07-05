@@ -13,8 +13,7 @@ internal import Combine
 class GameViewModel: ObservableObject {
     @Published private var gameModel = GameModel()
     @Published var searchText: String = ""
-
-    private var sortMode: SortMode = .platform
+    @Published var sortMode: SortMode = .platform
 
     private let logger: Logging
 
