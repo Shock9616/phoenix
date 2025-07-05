@@ -1,0 +1,15 @@
+{
+  "originHash" : "1589ce1cf5ebb2989624a3a2c75af16635b6bcaad3b0c846e8b0cb9bc98c3882",
+  "pins" : [
+    {
+      "identity" : "expandabletext",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jmshgs/ExpandableText",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4ca1db1b46995af1ea694e0e1eced86c80c71f0f"
+      }
+    }
+  ],
+  "version" : 3
+}

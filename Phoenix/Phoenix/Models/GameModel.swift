@@ -14,10 +14,12 @@ import Foundation
 /// the user's library
 /// - selectedGameIDs: A set of UUIDs that correspond to the selected
 /// games in the GameListView
+/// - runningGames: A dictionary of game IDs and process handles for
+/// games launched through Phoenix
 struct GameModel {
     var games: [Game]
     var selectedGameIDs: Set<UUID>
-    var runningGames: [Game] = []
+    var runningGames: [UUID: GameProcessHandle] = [:]
 
     init() {
         games = loadGames()
@@ -61,6 +63,7 @@ func loadGames() -> [Game] {
             status: .completed,
             recency: .month,
             isFavorite: false,
+            gameExecutable: URL(filePath: "/Users/kalebrosborough/Applications/AM2R.app"),
             launcher: "open 'file:///Users/kalebrosborough/Applications/AM2R.app/'",
             icon: URL(filePath: "/Users/kalebrosborough/Desktop/Phoenix Data Backup/cachedImages/D0E53744-5D93-487B-A802-E09953685736_icon.jpg"),
             header: URL(filePath: "/Users/kalebrosborough/Desktop/Phoenix Data Backup/cachedImages/D0E53744-5D93-487B-A802-E09953685736_header.jpg"),
@@ -99,6 +102,7 @@ func loadGames() -> [Game] {
             status: .completed,
             recency: .year,
             isFavorite: false,
+            gameExecutable: URL(filePath: "/Volumes/Gamez/emulation/ROMs/Switch/Games/Metroid Dread.nsp"),
             launcher: "'/Applications/Ryujinx.app/Contents/MacOS/Ryujinx' '/Volumes/Gamez/emulation/ROMs/Switch/Games/Metroid Dread.nsp' --fullscreen",
             icon: URL(filePath: "/Users/kalebrosborough/Desktop/Phoenix Data Backup/cachedImages/A95E0998-06C6-4F2E-B3B0-836E1A8D0885_icon.jpg"),
             header: URL(filePath: "/Users/kalebrosborough/Desktop/Phoenix Data Backup/cachedImages/A95E0998-06C6-4F2E-B3B0-836E1A8D0885_header.jpg"),

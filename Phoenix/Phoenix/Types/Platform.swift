@@ -39,6 +39,22 @@ enum Platform: Comparable {
         }
     }
 
+    func inferredLaunchMethod(for game: Game) -> LaunchMethod? {
+        switch self {
+            case .mac:
+                guard let path = game.gameExecutable else { return nil }
+                return .appBundle(path: path)
+            case .steam:
+                guard let steamID = game.steamID else { return nil }
+                return .urlScheme(url: "steam://run/\(steamID)")
+            case .nx:
+                guard let path = game.gameExecutable else { return nil }
+                return .shell(command: "'/Applications/Ryujinx.app/Contents/MacOS/Ryujinx' '\(path.path(percentEncoded: false))' --fullscreen")
+            default:
+                return nil
+        }
+    }
+
     static func < (lhs: Self, rhs: Self) -> Bool {
         let order: [Platform] = [.mac, .steam, .gog, .pc, .psx, .gba, .wii, .snes, .xbox, .nx, .other]
         return order.firstIndex(of: lhs)! < order.firstIndex(of: rhs)!

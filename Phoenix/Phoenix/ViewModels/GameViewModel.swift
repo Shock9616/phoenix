@@ -16,9 +16,14 @@ class GameViewModel: ObservableObject {
     @Published var sortMode: SortMode = .platform
 
     private let logger: Logging
+    private let gameLauncher: GameLaunching
 
-    init(logger: Logging = AppEnvironment.logger) {
+    init(
+        logger: Logging = AppEnvironment.logger,
+        gameLauncher: GameLaunching = GameLauncherService()
+    ) {
         self.logger = logger
+        self.gameLauncher = gameLauncher
     }
 
     /// The full list of the user's games
@@ -230,6 +235,18 @@ class GameViewModel: ObservableObject {
         return metadata
     }
 
+    // MARK: - Game Launching/Tracking
+
+    enum GameActionButtonState { case play, stop }
+
+    // Whether the action button should say "play" or "stop"
+    var actionButtonState: GameActionButtonState {
+        guard let selectedGame = selectedGame else { return .play }
+        return gameModel.runningGames.keys.contains(selectedGame.id) ? .stop : .play
+    }
+
+    // MARK: - Game Grouping
+
     /// A list of GameSectionss generated based on the current
     /// sorting setting
     var groupedGames: [GameSection] {
@@ -349,5 +366,41 @@ class GameViewModel: ObservableObject {
         gameModel.games[index].rating = rating
 
         logger.log("Updated rating of \(gameModel.games[index].name ?? "Unknown Game") to \(rating)", level: .info)
+    }
+
+    /// Launch the given game and add its process to the gameModel
+    ///
+    /// - Parameters:
+    /// - game: The game to be launched
+    func launchGame(_ game: Game) {
+        do {
+            logger.log("Launching game \(game.name ?? "Unknown Game")", level: .info)
+
+            let gameProcess = try gameLauncher.launch(game)
+            guard let gameID = selectedGame?.id else { return }
+
+            gameModel.runningGames[gameID] = gameProcess
+        } catch {
+            logger.log("Failed to launch game: \(error)", level: .error)
+        }
+    }
+
+    /// Kill the given game and remove its process from the gameModel
+    ///
+    /// - Parameters:
+    /// - game: The game to be killed
+    func killGame(_ game: Game) {
+        logger.log("Stopping game \(game.name ?? "Unknown Game")", level: .info)
+
+        guard let handle = gameModel.runningGames[game.id] else { return }
+
+        switch handle {
+            case .process(let proc):
+                proc.terminate()
+            case .application(let app):
+                app.terminate()
+        }
+
+        gameModel.runningGames.removeValue(forKey: game.id)
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Kaleb Rosborough on 2025-07-02.
 //
 
+import ExpandableText
 import SwiftUI
 
 /// A custom view for displaying the description of the selected game
@@ -25,9 +26,14 @@ struct DescriptionView: View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
-            Text(content)
-                .padding()
+            ExpandableText(content)
                 .font(.system(size: 14.5))
+                .buttonFont(Font.system(size: 13))
+                .buttonColor(Color.accentColor)
+                .lineLimit(7)
+                .trimMultipleNewlinesWhenTruncated(false)
+                .lineSpacing(3.5)
+                .padding()
         }
     }
 }

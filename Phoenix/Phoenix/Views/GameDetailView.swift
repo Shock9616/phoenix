@@ -30,15 +30,24 @@ struct GameDetailView: View {
             VStack(alignment: .leading, spacing: 10) {
                 // ---------- Controls ----------
                 HStack {
-                    // Play button
-                    ControlButtonView(action: {}, label: {
+                    // Play/Stop button
+                    ControlButtonView(action: {
+                        if let game = viewModel.selectedGame {
+                            switch viewModel.actionButtonState {
+                                case .play:
+                                    viewModel.launchGame(game)
+                                case .stop:
+                                    viewModel.killGame(game)
+                            }
+                        }
+                    }, label: {
                         HStack {
-                            Image(systemName: "play.fill")
-                            Text("Play")
+                            Image(systemName: viewModel.actionButtonState == .play ? "play.fill" : "stop.fill")
+                            Text(viewModel.actionButtonState == .play ? "Play" : "Stop")
                         }
                         .frame(width: 160, height: 50)
                     })
-                    .tint(.green)
+                    .tint(viewModel.actionButtonState == .play ? .green : .red)
 
                     // Edit game button
                     ControlButtonView(action: {}, label: {
