@@ -359,13 +359,25 @@ class GameViewModel: ObservableObject {
     func updateRating(_ rating: Float) {
         guard let selectedID = selectedGameIDs.first,
               let index = gameModel.games.firstIndex(where: { $0.id == selectedID })
-        else {
-            return
-        }
+        else { return }
 
         gameModel.games[index].rating = rating
 
         logger.log("Updated rating of \(gameModel.games[index].name ?? "Unknown Game") to \(rating)", level: .info)
+    }
+
+    /// Update a game in the gameModel
+    ///
+    /// - Parameters:
+    /// - game: The game to be updated
+    func updateGame(_ game: Game) {
+        guard let selectedID = selectedGameIDs.first,
+              let index = gameModel.games.firstIndex(where: { $0.id == selectedID })
+        else { return }
+
+        gameModel.games[index] = game
+
+        logger.log("Updated game \(game.name ?? "Unknown Game")", level: .info)
     }
 
     /// Launch the given game and add its process to the gameModel

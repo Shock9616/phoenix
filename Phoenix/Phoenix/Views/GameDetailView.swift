@@ -54,6 +54,9 @@ struct GameDetailView: View {
                     ControlButtonView(action: {
                         guard let selected = viewModel.selectedGame else { return }
                         formViewModel = GameFormViewModel(mode: .edit(existing: selected))
+                        formViewModel?.onSave = { updatedGame in
+                            viewModel.updateGame(updatedGame)
+                        }
                     }, label: {
                         Image(systemName: "pencil")
                             .frame(width: 40, height: 50)
@@ -61,6 +64,8 @@ struct GameDetailView: View {
                     .tint(.gray)
                     .sheet(item: $formViewModel) { vm in
                         GameFormView(viewModel: vm)
+                            .frame(width: 800)
+                            .padding()
                     }
 
                     // Star Rating

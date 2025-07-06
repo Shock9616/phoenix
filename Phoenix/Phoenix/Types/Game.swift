@@ -10,7 +10,7 @@ import Foundation
 /// The struct containing all data related to a game
 struct Game: Identifiable {
     // IDs
-    let id: UUID = .init()
+    var id: UUID = .init()
     var steamID: Int?
     var igdbID: Int?
     
@@ -25,7 +25,6 @@ struct Game: Identifiable {
     // Launcher functionality
     var gameExecutable: URL?
     var launcher: String?
-    var process: Process?
     
     // Images
     var icon: URL?

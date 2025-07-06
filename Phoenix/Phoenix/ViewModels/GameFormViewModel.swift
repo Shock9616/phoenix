@@ -13,6 +13,7 @@ enum GameFormMode {
     case edit(existing: Game)
 }
 
+/// The view model that handles creating/editing a game
 class GameFormViewModel: ObservableObject, Identifiable {
     let id = UUID()
 
@@ -31,6 +32,14 @@ class GameFormViewModel: ObservableObject, Identifiable {
     @Published var publishers: [String] = []
     @Published var releaseDate: Date = .init()
     @Published var igdbID: Int?
+
+    private var gameID: UUID?
+    private var steamID: Int?
+    private var recency: Recency = .never
+    private var isHidden: Bool = false
+    private var isFavorite: Bool = false
+    private var rating: Float?
+    private var lastPlayed: Date?
 
     private let mode: GameFormMode
     var onSave: ((Game) -> Void)? = nil
@@ -53,15 +62,55 @@ class GameFormViewModel: ObservableObject, Identifiable {
             publishers = existing.publishers
             releaseDate = existing.releaseDate ?? Date()
             igdbID = existing.igdbID
+
+            gameID = existing.id
+            steamID = existing.steamID
+            recency = existing.recency
+            isHidden = existing.isHidden
+            isFavorite = existing.isFavorite
+            rating = existing.rating
+            lastPlayed = existing.lastPlayed
+        } else {
+            gameID = nil
+            steamID = nil
+            rating = 0
+            lastPlayed = nil
         }
     }
 
+    // Convert the genres array to a string and back
+    var genresText: String {
+        get {
+            genres.joined(separator: "\n")
+        } set {
+            genres = newValue
+                .components(separatedBy: .newlines)
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+        }
+    }
+
+    // Convert the IGDB ID to a string and back
+    var igdbIDText: String {
+        get {
+            String(igdbID ?? 0)
+        } set {
+            igdbID = Int(newValue)
+        }
+    }
+
+    /// Create a new game object with the updated values and save
     func saveGame() {
         let game = Game(
+            id: gameID ?? UUID(),
+            steamID: steamID,
             igdbID: igdbID,
             name: name,
             platform: platform,
             status: status,
+            recency: recency,
+            isHidden: isHidden,
+            isFavorite: isFavorite,
             gameExecutable: gameExecutable,
             launcher: launcher,
             icon: icon,
@@ -71,8 +120,11 @@ class GameFormViewModel: ObservableObject, Identifiable {
             description: description,
             genres: genres,
             releaseDate: releaseDate,
+            lastPlayed: lastPlayed,
             developers: developers,
             publishers: publishers,
         )
+
+        onSave?(game)
     }
 }
