@@ -96,12 +96,32 @@ struct GameLauncherService: GameLaunching {
     /// - Parameters:
     /// - path: The URL to the app bundle to be launched
     ///
+    /// - Throws: An error if there is an issue launching the app
+    ///
     /// - Returns: A GameProcessHandle for keeping track of the
     /// running game, or nil if something goes wrong
     private func launchAppBundle(at path: URL) throws -> GameProcessHandle? {
         AppEnvironment.logger.log("Launching app bundle: \(path)", level: .info)
 
-        if let app = try? NSWorkspace.shared.launchApplication(at: path, options: [], configuration: [:]) {
+        var launchedApp: NSRunningApplication?
+        var launchError: Error?
+        let semaphore = DispatchSemaphore(value: 0)
+
+        let config = NSWorkspace.OpenConfiguration()
+
+        NSWorkspace.shared.openApplication(at: path, configuration: config) { app, error in
+            launchedApp = app
+            launchError = error
+            semaphore.signal()
+        }
+
+        _ = semaphore.wait(timeout: .now() + 10)
+
+        if let error = launchError {
+            throw error
+        }
+
+        if let app = launchedApp {
             return .application(app)
         }
 
