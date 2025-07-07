@@ -380,6 +380,17 @@ class GameViewModel: ObservableObject {
         logger.log("Updated game \(game.name ?? "Unknown Game")", level: .info)
     }
 
+    /// Add a game to the gameModel
+    ///
+    /// - Parameters:
+    /// - game: The game to be added
+    func addGame(_ game: Game) {
+        gameModel.games.append(game)
+        gameModel.selectedGameIDs = [game.id]
+
+        logger.log("Added game \(game.name ?? "Unknown Game")", level: .info)
+    }
+
     /// Launch the given game and add its process to the gameModel
     ///
     /// - Parameters:

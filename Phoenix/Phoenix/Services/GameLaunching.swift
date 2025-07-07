@@ -98,7 +98,7 @@ struct GameLauncherService: GameLaunching {
     ///
     /// - Returns: A GameProcessHandle for keeping track of the
     /// running game, or nil if something goes wrong
-    private func launchAppBundle(at path: URL) -> GameProcessHandle? {
+    private func launchAppBundle(at path: URL) throws -> GameProcessHandle? {
         AppEnvironment.logger.log("Launching app bundle: \(path)", level: .info)
 
         if let app = try? NSWorkspace.shared.launchApplication(at: path, options: [], configuration: [:]) {

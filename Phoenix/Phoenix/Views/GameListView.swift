@@ -38,6 +38,10 @@ struct GameListView: View {
             // Send newly selected games to the view model
             viewModel.selectGames(selectedIDs)
         }
+        .onChange(of: viewModel.selectedGameIDs) {
+            // Update selected games when view model updates
+            selectedIDs = viewModel.selectedGameIDs
+        }
         .searchable(text: $viewModel.searchText, placement: .sidebar, prompt: "Search")
     }
 }
