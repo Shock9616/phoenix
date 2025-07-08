@@ -21,10 +21,10 @@ struct PhoenixRootView: View {
                 .toolbar { ToolbarView(viewModel: viewModel) }
                 .frame(minWidth: 180)
         } detail: {
-            if viewModel.selectedGameIDs.count == 1 {
+            if viewModel.selectedGames.count == 1 {
                 // If one game is selected
                 GameDetailView(viewModel: viewModel)
-            } else if viewModel.selectedGameIDs.count > 1 {
+            } else if viewModel.selectedGames.count > 1 {
                 // If multiple games are selected
                 MultipleGamesView(viewModel: viewModel)
             }
@@ -35,11 +35,10 @@ struct PhoenixRootView: View {
     /// Get the name of the selected game, or return default names
     /// for when multiple/no games are selected
     private var selectedGameName: String {
-        if viewModel.selectedGameIDs.count > 1 {
+        if viewModel.selectedGames.count > 1 {
             // If multiple games are selected
             return "Games"
-        } else if let selectedID = viewModel.selectedGameIDs.first,
-                  let selectedGame = viewModel.games.first(where: { $0.id == selectedID }),
+        } else if let selectedGame = viewModel.selectedGame,
                   let name = selectedGame.name
         {
             // If one game is selected

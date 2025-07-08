@@ -20,15 +20,10 @@ struct GameListView: View {
     @ObservedObject var viewModel: GameViewModel
     @State private var selectedIDs: Set<UUID> = []
 
+    /// The actual list object
     var body: some View {
         List(selection: $selectedIDs) {
-            ForEach(viewModel.displaySections) { section in // Sections
-                Section(header: Text("\(section.title) (\(section.games.count))")) {
-                    ForEach(section.games) { game in // Games in each section
-                        GameListItemView(game: game)
-                    }
-                }
-            }
+            GameSectionsView
         }
         .onAppear {
             // Ensure games are selected right away
@@ -43,5 +38,30 @@ struct GameListView: View {
             selectedIDs = viewModel.selectedGameIDs
         }
         .searchable(text: $viewModel.searchText, placement: .sidebar, prompt: "Search")
+    }
+
+    /// The different computed sections to populate the list
+    private var GameSectionsView: some View {
+        ForEach(viewModel.displaySections) { section in // Sections
+            Section(header: Text("\(section.title) (\(section.games.count))")) {
+                ForEach(section.games) { game in // Games in each section
+                    GameRowView(game: game)
+                }
+            }
+        }
+    }
+
+    /// The displayed contents for each game
+    private func GameRowView(game: Game) -> some View {
+        GameListItemView(viewModel: viewModel, game: game)
+            .contextMenu {
+                GameContextMenuView(
+                    game: game,
+                    viewModel: viewModel,
+                    onEditName: {
+                        viewModel.editGameName(game)
+                    }
+                )
+            }
     }
 }

@@ -23,12 +23,15 @@ struct MultipleGamesView: View {
             Image("GameStackIcon")
                 .font(.system(size: 80))
 
-            Text("\(viewModel.selectedGameIDs.count) Games Selected")
+            Text("\(viewModel.selectedGames.count) Games Selected")
                 .font(.title)
                 .fontWeight(.semibold)
 
             HStack {
-                Button(action: {}, label: {
+                // Hide games button
+                Button(action: {
+                    viewModel.hideGames(viewModel.selectedGames)
+                }, label: {
                     Text("Hide Games")
                         .padding(.horizontal, 5)
                         .padding(.vertical, 3)
@@ -38,7 +41,10 @@ struct MultipleGamesView: View {
                         .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
                 )
 
-                Button(action: {}, label: {
+                // Delete games button
+                Button(action: {
+                    viewModel.deleteGames(viewModel.selectedGames)
+                }, label: {
                     Text("Delete Games")
                         .padding(.horizontal, 5)
                         .padding(.vertical, 3)
