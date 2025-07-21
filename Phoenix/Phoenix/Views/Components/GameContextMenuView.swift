@@ -18,6 +18,9 @@ struct GameContextMenuView: View {
         Button(action: {
             viewModel.toggleGamesFavorite(viewModel.selectedGames)
         }, label: {
+            if #available(macOS 26.0, *) {
+                Image(systemName: game.isFavorite ? "star.slash" : "star")
+            }
             Text(game.isFavorite ? "Unfavorite" : "Favorite")
         })
 
@@ -25,6 +28,9 @@ struct GameContextMenuView: View {
         Button(action: {
             viewModel.hideGames(viewModel.selectedGames)
         }, label: {
+            if #available(macOS 26.0, *) {
+                Image(systemName: "eye.slash")
+            }
             Text("Hide")
         })
 
@@ -32,6 +38,9 @@ struct GameContextMenuView: View {
         Button(action: {
             viewModel.deleteGames(viewModel.selectedGames)
         }, label: {
+            if #available(macOS 26.0, *) {
+                Image(systemName: "trash")
+            }
             Text("Delete")
         })
 
@@ -41,6 +50,9 @@ struct GameContextMenuView: View {
 
             // Rename button
             Button(action: onEditName) {
+                if #available(macOS 26.0, *) {
+                    Image(systemName: "pencil")
+                }
                 Text("Rename")
             }
 
@@ -48,6 +60,9 @@ struct GameContextMenuView: View {
             Button(action: {
                 viewModel.promptForNewIcon(for: game)
             }, label: {
+                if #available(macOS 26.0, *) {
+                    Image(systemName: "square.dashed")
+                }
                 Text("Change icon")
             })
         }
@@ -55,7 +70,7 @@ struct GameContextMenuView: View {
         Divider()
 
         // Change platform menu
-        Menu("Change platform") {
+        Menu(content: {
             ForEach(Platform.allCases) { platform in
                 Button(action: {
                     viewModel.editGamesPlatform(viewModel.selectedGames, platform)
@@ -63,10 +78,15 @@ struct GameContextMenuView: View {
                     Text(platform.displayName)
                 })
             }
-        }
+        }, label: {
+            if #available(macOS 26.0, *) {
+                Image(systemName: "gamecontroller")
+            }
+            Text("Change platform")
+        })
 
         // Change status menu
-        Menu("Change status") {
+        Menu(content: {
             ForEach(Status.allCases) { status in
                 Button(action: {
                     viewModel.editGamesStatus(viewModel.selectedGames, status)
@@ -74,6 +94,11 @@ struct GameContextMenuView: View {
                     Text(status.displayName)
                 })
             }
-        }
+        }, label: {
+            if #available(macOS 26.0, *) {
+                Image(systemName: "trophy")
+            }
+            Text("Change status")
+        })
     }
 }
