@@ -50,7 +50,7 @@ struct GameDetailView: View {
                         }
                         .frame(width: 160, height: 50)
                     })
-                    .conditionalTint(viewModel.actionButtonState == .play ? .green : .red)
+                    .conditionalTint(.accentColor)
 
                     // Edit game button
                     ControlButtonView(action: {
@@ -63,7 +63,7 @@ struct GameDetailView: View {
                         Image(systemName: "pencil")
                             .frame(width: 35, height: 50)
                     })
-                    .conditionalTint(.gray)
+                    .conditionalTint(.accentColor)
                     .sheet(item: $formViewModel) { vm in
                         GameFormView(viewModel: vm)
                             .frame(width: 800)
