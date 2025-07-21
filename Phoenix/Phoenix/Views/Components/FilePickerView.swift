@@ -9,7 +9,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct FilePickerView: View {
-    let title: String
+//    let title: String
     @Binding var filePath: URL?
     let type: UTType
     
@@ -18,10 +18,18 @@ struct FilePickerView: View {
     
     var body: some View {
         HStack {
-            fileInfoView
-            Spacer()
+//            Text(title)
             Button("Browse") {
                 isPicking = true
+            }
+            if let filePath = filePath {
+                Text(filePath.lastPathComponent)
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+            } else {
+                Text("Select or drag and drop a file")
+                    .foregroundColor(.secondary)
+                    .font(.caption)
             }
         }
         .contentShape(Rectangle())
@@ -32,21 +40,6 @@ struct FilePickerView: View {
             allowsMultipleSelection: false
         ) { result in
             handleFileImport(result)
-        }
-    }
-    
-    private var fileInfoView: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(title)
-            if let filePath = filePath {
-                Text(filePath.lastPathComponent)
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-            } else {
-                Text("Select or drag and drop a file")
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-            }
         }
     }
     

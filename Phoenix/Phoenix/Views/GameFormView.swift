@@ -18,125 +18,160 @@ struct GameFormView: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        ScrollView {
-            VStack {
-                // Name input
-                HStack {
-                    Text("Name")
-                    Spacer()
-                    TextField("", text: $viewModel.name)
-                        .frame(width: 680)
-                }
-                .padding()
-
-                // Icon input
-                FilePickerView(title: "Icon", filePath: $viewModel.icon, type: .image)
-                    .padding()
-
-                // Platform input
-                HStack {
-                    Text("Platform")
-                    Spacer()
-                    Picker("", selection: $viewModel.platform) {
-                        ForEach(Platform.allCases) { platform in
-                            Text(platform.displayName)
-                        }
-                    }
-                    .frame(width: 680)
-                    .labelsHidden()
-                }
-                .padding()
-
-                // Status input
-                HStack {
-                    Text("Status")
-                    Spacer()
-                    Picker("", selection: $viewModel.status) {
-                        ForEach(Status.allCases) { status in
-                            Text(status.displayName)
-                        }
-                    }
-                    .frame(width: 680)
-                    .labelsHidden()
-                }
-                .padding()
-
-                // Game executable input
-                FilePickerView(title: "Game", filePath: $viewModel.gameExecutable, type: .data)
-                    .padding()
-            }
-
-            // Advanced section
-            DisclosureGroup("Advanced") {
-                VStack {
-                    // Command input
-                    HStack {
-                        Text("Command")
-                        Spacer()
-                        TextField("", text: $viewModel.launcher)
-                            .frame(width: 680)
-                    }
-                    .padding(.vertical)
-
-                    // Description input
-                    HStack {
-                        Text("Description")
-                        Spacer()
-                        TextField("", text: $viewModel.description, axis: .vertical)
-                            .frame(width: 680)
-                    }
-                    .padding(.vertical)
-
-                    // Genres input
-                    HStack {
-                        Text("Genres")
-                        Spacer()
-                        TextField("", text: Binding(get: { viewModel.genresText }, set: { viewModel.genresText = $0 }), axis: .vertical)
-                            .frame(width: 680)
-                    }
-
-                    // Header input
-                    FilePickerView(title: "Header", filePath: $viewModel.header, type: .image)
-                        .padding(.vertical)
-
-                    // Cover input
-                    FilePickerView(title: "Cover", filePath: $viewModel.cover, type: .image)
-                        .padding(.vertical)
-
-                    // Release date input
-                    HStack {
-                        DatePicker("Release Date", selection: $viewModel.releaseDate, displayedComponents: .date)
-                        Spacer()
-                    }
-                    .padding(.vertical)
-
-                    // IGDB ID input
-                    HStack {
-                        Text("IGDB ID")
-                        Spacer()
-                        TextField("", text: Binding(get: { viewModel.igdbIDText }, set: { viewModel.igdbIDText = $0 }), axis: .vertical)
-                            .frame(width: 680)
-                    }
-                    .padding(.vertical)
-                }
-            }
-            .padding()
-
+        ZStack {
+            Rectangle()
+                .frame(height: 100)
+                .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
             HStack {
-                // Fetch metadata button
-                Button(action: {}, label: {
-                    Text("Fetch Metadata")
-                })
-
-                // Save game button
-                Button(action: {
-                    viewModel.saveGame()
-                    dismiss()
-                }, label: {
-                    Text("Save Game")
-                })
+                if let iconPath = viewModel.icon, let icon = loadImage(filePath: iconPath) {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                }
+                Text(viewModel.name)
+                    .font(.system(size: 24))
             }
             .padding()
         }
+        .padding(.horizontal, -20)
+        .padding(.top, -20)
+
+        Grid(alignment: .leading) {
+            // Name input
+            GridRow {
+                Text("Name")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                TextField("", text: $viewModel.name)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
+            // Icon input
+            GridRow {
+                Text("Icon")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                FilePickerView(filePath: $viewModel.icon, type: .image)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
+            // Platform input
+            GridRow {
+                Text("Platform")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                Picker("", selection: $viewModel.platform) {
+                    ForEach(Platform.allCases) { platform in
+                        Text(platform.displayName)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .labelsHidden()
+            }
+            .padding(.vertical, 5)
+
+            // Status input
+            GridRow {
+                Text("Status")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                Picker("", selection: $viewModel.status) {
+                    ForEach(Status.allCases) { status in
+                        Text(status.displayName)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .labelsHidden()
+            }
+            .padding(.vertical, 5)
+
+            // Game executable input
+            GridRow {
+                Text("Game")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                FilePickerView(filePath: $viewModel.gameExecutable, type: .data)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
+            // Command input
+            GridRow {
+                Text("Command")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                TextField("", text: $viewModel.launcher)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
+            // Description input
+            GridRow {
+                Text("Description")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                TextField("", text: $viewModel.description, axis: .vertical)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
+            // Genres input
+            GridRow {
+                Text("Genres")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                TextField("", text: Binding(get: { viewModel.genresText }, set: { viewModel.genresText = $0 }), axis: .vertical)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
+            // Header input
+            GridRow {
+                Text("Header")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                FilePickerView(filePath: $viewModel.header, type: .image)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
+            // Cover input
+            GridRow {
+                Text("Cover")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                FilePickerView(filePath: $viewModel.cover, type: .image)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
+            // Release date input
+            GridRow {
+                Text("Release Date")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                DatePicker("", selection: $viewModel.releaseDate, displayedComponents: .date)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .labelsHidden()
+            }
+            .padding(.vertical, 5)
+
+            // IGDB ID input
+            GridRow {
+                Text("IGDB ID")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                TextField("", text: Binding(get: { viewModel.igdbIDText }, set: { viewModel.igdbIDText = $0 }), axis: .vertical)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+        }
+        .padding()
+
+        HStack {
+            // Fetch metadata button
+            Button(action: {}, label: {
+                Text("Fetch Metadata")
+            })
+
+            // Save game button
+            Button(action: {
+                viewModel.saveGame()
+                dismiss()
+            }, label: {
+                Text("Save Game")
+            })
+        }
+        .padding()
     }
 }
