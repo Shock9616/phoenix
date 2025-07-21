@@ -25,6 +25,8 @@ struct GameDetailView: View {
             // ========== Header ==========
 
             HeaderView(image: viewModel.selectedGameHeader, height: 450)
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.horizontal)
 
             // ========== Content ==========
 
