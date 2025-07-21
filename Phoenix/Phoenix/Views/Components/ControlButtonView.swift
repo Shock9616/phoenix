@@ -20,6 +20,24 @@ struct ControlButtonView<Label: View>: View {
     let label: () -> Label
 
     var body: some View {
+        if #available(macOS 26.0, *) {
+            tahoe
+        } else {
+            sequoia
+        }
+    }
+
+    var tahoe: some View {
+        Button(action: action, label: {
+            label()
+                .font(.system(size: 25))
+                .foregroundColor(.accentColor)
+        })
+        .cornerRadius(40)
+        .buttonStyle(.bordered)
+    }
+
+    var sequoia: some View {
         Button(action: action, label: {
             label()
                 .font(.system(size: 25))
