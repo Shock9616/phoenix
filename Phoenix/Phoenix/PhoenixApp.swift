@@ -22,7 +22,10 @@ struct PhoenixApp: App {
     var body: some Scene {
         WindowGroup {
             PhoenixRootView(viewModel: gameViewModel)
-                .frame(minWidth: 700, minHeight: 485)
+                .frame(minWidth: 835, minHeight: 485)
+        }
+        .commands {
+            MenuCommands(viewModel: gameViewModel)
         }
     }
 }
