@@ -12,9 +12,13 @@ import SwiftUI
 /// Shows the game's icon followed by the game's name
 ///
 /// - Parameters:
+/// - gameViewModel: The view model for communicating with the app's backend
+/// - settingsViewModel: The view model that handles the app's global settings
 /// - game: The game whose name and icon should be displayed
 struct GameListItemView: View {
-    @ObservedObject var viewModel: GameViewModel
+    @ObservedObject var gameViewModel: GameViewModel
+    @ObservedObject var settingsViewModel: SettingsViewModel
+    
     let game: Game
     
     @State private var editedName: String = ""
@@ -22,14 +26,16 @@ struct GameListItemView: View {
     
     var body: some View {
         HStack {
-            gameIcon
-                .resizable()
-                .frame(width: 25, height: 25)
+            if settingsViewModel.showIcons {
+                gameIcon
+                    .resizable()
+                    .frame(width: 25, height: 25)
+            }
             
-            if viewModel.renamingGameID == game.id {
+            if gameViewModel.renamingGameID == game.id {
                 // If renaming the game, use a text field
                 TextField("", text: $editedName, onCommit: {
-                    viewModel.commitNameChange(editedName, for: game)
+                    gameViewModel.commitNameChange(editedName, for: game)
                 })
                 .textFieldStyle(.plain)
                 .focused($isRenaming)
@@ -42,11 +48,11 @@ struct GameListItemView: View {
                 }
                 .onSubmit {
                     // Commit the game's new name
-                    viewModel.commitNameChange(editedName, for: game)
+                    gameViewModel.commitNameChange(editedName, for: game)
                 }
                 .onExitCommand {
                     // Stop editing the game's name
-                    viewModel.renamingGameID = nil
+                    gameViewModel.renamingGameID = nil
                 }
             } else {
                 // If not renaming, just use a regular text object
@@ -77,36 +83,36 @@ struct GameListItemView: View {
         
         // Command-click: toggle individual selection
         if flags.contains(.command) {
-            var updated = viewModel.selectedGameIDs
+            var updated = gameViewModel.selectedGameIDs
             if updated.contains(currentID) {
                 updated.remove(currentID)
             } else {
                 updated.insert(currentID)
             }
-            viewModel.selectGames(updated)
+            gameViewModel.selectGames(updated)
             return
         }
         
         // Shift-click: select range
         if flags.contains(.shift),
-           let lastID = viewModel.lastSelectedGameID,
-           let lastIndex = viewModel.games.firstIndex(where: { $0.id == lastID }),
-           let currentIndex = viewModel.games.firstIndex(where: { $0.id == currentID })
+           let lastID = gameViewModel.lastSelectedGameID,
+           let lastIndex = gameViewModel.games.firstIndex(where: { $0.id == lastID }),
+           let currentIndex = gameViewModel.games.firstIndex(where: { $0.id == currentID })
         {
             let lower = min(lastIndex, currentIndex)
             let upper = max(lastIndex, currentIndex)
             
-            let allGames = viewModel.games.filter { !$0.isHidden }
+            let allGames = gameViewModel.games.filter { !$0.isHidden }
             let rangeIDs = Set(allGames[lower ... upper].map(\.id))
-            viewModel.selectGames(rangeIDs)
+            gameViewModel.selectGames(rangeIDs)
             return
         }
         
         // No modifiers
-        if viewModel.selectedGameIDs.contains(currentID) {
-            viewModel.editGameName(game)
+        if gameViewModel.selectedGameIDs.contains(currentID) {
+            gameViewModel.editGameName(game)
         } else {
-            viewModel.selectGames([currentID])
+            gameViewModel.selectGames([currentID])
         }
     }
 }

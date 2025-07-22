@@ -14,6 +14,7 @@ import SwiftUI
 ///
 /// - Parameters:
 /// - image: The image to display as the header
+/// - height: The height of the header
 struct HeaderView: View {
     let image: Image
     let height: CGFloat

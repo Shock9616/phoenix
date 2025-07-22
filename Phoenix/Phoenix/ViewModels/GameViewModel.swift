@@ -216,6 +216,12 @@ class GameViewModel: ObservableObject {
         // Status
         metadata.append(("Status", selectedGameStatus.displayName))
         
+        // Rating
+        @AppStorage("showStarRating") var showStarRating: Bool = true
+        if !showStarRating {
+            metadata.append(("Rating", String(selectedGameRating)))
+        }
+        
         // Genres
         let genres = selectedGameGenres.compactMap { $0 }
         if !genres.isEmpty {

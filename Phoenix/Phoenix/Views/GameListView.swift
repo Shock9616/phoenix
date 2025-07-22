@@ -13,11 +13,12 @@ import SwiftUI
 /// and a search box
 ///
 /// - Parameters:
-/// - viewModel: The view model for communicating with the app's
-/// backend
-/// - selectedIDs: The currently selected games
+/// - gameViewModel: The view model for communicating with the app's backend
+/// - settingsViewModel: The view model that handles the app's global settings
 struct GameListView: View {
-    @ObservedObject var viewModel: GameViewModel
+    @ObservedObject var gameViewModel: GameViewModel
+    @ObservedObject var settingsViewModel: SettingsViewModel
+    
     @State private var selectedIDs: Set<UUID> = []
 
     /// The actual list object
@@ -27,23 +28,25 @@ struct GameListView: View {
         }
         .onAppear {
             // Ensure games are selected right away
-            selectedIDs = viewModel.selectedGameIDs
+            selectedIDs = gameViewModel.selectedGameIDs
         }
         .onChange(of: selectedIDs) {
             // Send newly selected games to the view model
-            viewModel.selectGames(selectedIDs)
+            gameViewModel.selectGames(selectedIDs)
         }
-        .onChange(of: viewModel.selectedGameIDs) {
+        .onChange(of: gameViewModel.selectedGameIDs) {
             // Update selected games when view model updates
-            selectedIDs = viewModel.selectedGameIDs
+            selectedIDs = gameViewModel.selectedGameIDs
         }
-        .searchable(text: $viewModel.searchText, placement: .sidebar, prompt: "Search")
+        .searchable(text: $gameViewModel.searchText, placement: .sidebar, prompt: "Search")
     }
 
     /// The different computed sections to populate the list
     private var GameSectionsView: some View {
-        ForEach(viewModel.displaySections) { section in // Sections
-            Section(header: Text("\(section.title) (\(section.games.count))")) {
+        ForEach(gameViewModel.displaySections) { section in // Sections
+            Section(header: settingsViewModel.showGameCount
+                    ? Text("\(section.title) (\(section.games.count))")
+                    : Text(section.title)) {
                 ForEach(section.games) { game in // Games in each section
                     GameRowView(game: game)
                 }
@@ -53,13 +56,13 @@ struct GameListView: View {
 
     /// The displayed contents for each game
     private func GameRowView(game: Game) -> some View {
-        GameListItemView(viewModel: viewModel, game: game)
+        GameListItemView(gameViewModel: gameViewModel, settingsViewModel: settingsViewModel, game: game)
             .contextMenu {
                 GameContextMenuView(
                     game: game,
-                    viewModel: viewModel,
+                    gameViewModel: gameViewModel,
                     onEditName: {
-                        viewModel.editGameName(game)
+                        gameViewModel.editGameName(game)
                     }
                 )
             }

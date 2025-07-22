@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+/// All the custom menu bar commands for Phoenix
+///
+/// - Parameters:
+/// - gameViewModel: The view model for communicating with the app's backend
 struct MenuCommands: Commands {
-    @ObservedObject var viewModel: GameViewModel
+    @ObservedObject var gameViewModel: GameViewModel
     
     var body: some Commands {
-        // File menu
+        // ========== File Menu ==========
+        
         CommandGroup(before: .newItem) {
             // Add Game
             Button(action: {}, label: {
@@ -54,7 +59,8 @@ struct MenuCommands: Commands {
             .keyboardShortcut("o", modifiers: [.command, .shift])
         }
         
-        // View
+        // ========== View Menu ==========
+        
         CommandGroup(replacing: .sidebar) {
             // Sort by platform
             Button(action: {}, label: {
@@ -95,14 +101,16 @@ struct MenuCommands: Commands {
             Divider()
         }
         
-        // Updates
+        // ========== Updates ==========
+        
         CommandGroup(after: .appInfo) {
             Button(action: {}, label: {
                 Text("Check for Updates")
             })
         }
         
-        // Help
+        // ========== Help Menu ==========
+        
         CommandGroup(replacing: .help) {
             // Phoenix help
             Button(action: {}, label: {

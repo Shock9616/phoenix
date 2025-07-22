@@ -12,10 +12,10 @@ import SwiftUI
 /// Contains the add game button and the sorting mode picker
 ///
 /// - Parameters:
-/// - viewModel: The viewModel for communicating with the app's
+/// - gameViewModel: The view model for communicating with the app's
 /// backend
 struct ToolbarView: ToolbarContent {
-    @ObservedObject var viewModel: GameViewModel
+    @ObservedObject var gameViewModel: GameViewModel
     @State private var formViewModel: GameFormViewModel?
 
     var body: some ToolbarContent {
@@ -25,19 +25,19 @@ struct ToolbarView: ToolbarContent {
             Button(action: {
                 formViewModel = GameFormViewModel(mode: .add)
                 formViewModel?.onSave = { updatedGame in
-                    viewModel.addGame(updatedGame)
+                    gameViewModel.addGame(updatedGame)
                 }
             }, label: {
                 Label(String(localized: "file_AddGame"), systemImage: "plus")
             })
             .sheet(item: $formViewModel) { vm in
-                GameFormView(viewModel: vm)
+                GameFormView(gameFormViewModel: vm)
                     .frame(width: 800)
                     .padding()
             }
         }
         ToolbarItem(placement: .primaryAction) {
-            Picker("Sort By", selection: $viewModel.sortMode) {
+            Picker("Sort By", selection: $gameViewModel.sortMode) {
                 ForEach(SortMode.allCases) { mode in
                     Label {
                         Text(mode.displayName)

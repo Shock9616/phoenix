@@ -27,6 +27,7 @@ struct ControlButtonView<Label: View>: View {
         }
     }
 
+    /// The ControlButtonView for macOS >=26
     var tahoe: some View {
         Button(action: action, label: {
             label()
@@ -37,6 +38,7 @@ struct ControlButtonView<Label: View>: View {
         .buttonStyle(.bordered)
     }
 
+    /// The ControlButtonView for macOS <26
     var sequoia: some View {
         Button(action: action, label: {
             label()

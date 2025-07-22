@@ -13,24 +13,24 @@ import SwiftUI
 /// and deleting those games
 ///
 /// - Parameters:
-/// - viewModel: The view model for communicating with the app's
+/// - gameViewModel: The view model for communicating with the app's
 /// backend
 struct MultipleGamesView: View {
-    @ObservedObject var viewModel: GameViewModel
+    @ObservedObject var gameViewModel: GameViewModel
 
     var body: some View {
         Group {
             Image("GameStackIcon")
                 .font(.system(size: 80))
 
-            Text("\(viewModel.selectedGames.count) Games Selected")
+            Text("\(gameViewModel.selectedGames.count) Games Selected")
                 .font(.title)
                 .fontWeight(.semibold)
 
             HStack {
                 // Hide games button
                 Button(action: {
-                    viewModel.hideGames(viewModel.selectedGames)
+                    gameViewModel.hideGames(gameViewModel.selectedGames)
                 }, label: {
                     Text("Hide Games")
                         .padding(.horizontal, 5)
@@ -43,7 +43,7 @@ struct MultipleGamesView: View {
 
                 // Delete games button
                 Button(action: {
-                    viewModel.deleteGames(viewModel.selectedGames)
+                    gameViewModel.deleteGames(gameViewModel.selectedGames)
                 }, label: {
                     Text("Delete Games")
                         .padding(.horizontal, 5)

@@ -11,10 +11,9 @@ import UniformTypeIdentifiers
 /// The view containing controls to edit or create a new game
 ///
 /// - Parameters:
-/// - viewModel: The view model for keeping track of changes to the
-/// game
+/// - gameFormViewModel: The view model for keeping track of changes to the game
 struct GameFormView: View {
-    @ObservedObject var viewModel: GameFormViewModel
+    @ObservedObject var gameFormViewModel: GameFormViewModel
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -23,12 +22,12 @@ struct GameFormView: View {
                 .frame(height: 100)
                 .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
             HStack {
-                if let iconPath = viewModel.icon, let icon = loadImage(filePath: iconPath) {
+                if let iconPath = gameFormViewModel.icon, let icon = loadImage(filePath: iconPath) {
                     Image(nsImage: icon)
                         .resizable()
                         .frame(width: 60, height: 60)
                 }
-                Text(viewModel.name)
+                Text(gameFormViewModel.name)
                     .font(.system(size: 24))
             }
             .padding()
@@ -41,7 +40,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Name")
                     .frame(maxWidth: 80, alignment: .trailing)
-                TextField("", text: $viewModel.name)
+                TextField("", text: $gameFormViewModel.name)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -50,7 +49,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Icon")
                     .frame(maxWidth: 80, alignment: .trailing)
-                FilePickerView(filePath: $viewModel.icon, type: .image)
+                FilePickerView(filePath: $gameFormViewModel.icon, type: .image)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -59,7 +58,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Platform")
                     .frame(maxWidth: 80, alignment: .trailing)
-                Picker("", selection: $viewModel.platform) {
+                Picker("", selection: $gameFormViewModel.platform) {
                     ForEach(Platform.allCases) { platform in
                         Text(platform.displayName)
                     }
@@ -73,7 +72,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Status")
                     .frame(maxWidth: 80, alignment: .trailing)
-                Picker("", selection: $viewModel.status) {
+                Picker("", selection: $gameFormViewModel.status) {
                     ForEach(Status.allCases) { status in
                         Text(status.displayName)
                     }
@@ -87,7 +86,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Game")
                     .frame(maxWidth: 80, alignment: .trailing)
-                FilePickerView(filePath: $viewModel.gameExecutable, type: .data)
+                FilePickerView(filePath: $gameFormViewModel.gameExecutable, type: .data)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -96,7 +95,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Command")
                     .frame(maxWidth: 80, alignment: .trailing)
-                TextField("", text: $viewModel.launcher)
+                TextField("", text: $gameFormViewModel.launcher)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -105,7 +104,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Description")
                     .frame(maxWidth: 80, alignment: .trailing)
-                TextField("", text: $viewModel.description, axis: .vertical)
+                TextField("", text: $gameFormViewModel.description, axis: .vertical)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -114,7 +113,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Genres")
                     .frame(maxWidth: 80, alignment: .trailing)
-                TextField("", text: Binding(get: { viewModel.genresText }, set: { viewModel.genresText = $0 }), axis: .vertical)
+                TextField("", text: Binding(get: { gameFormViewModel.genresText }, set: { gameFormViewModel.genresText = $0 }), axis: .vertical)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -123,7 +122,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Header")
                     .frame(maxWidth: 80, alignment: .trailing)
-                FilePickerView(filePath: $viewModel.header, type: .image)
+                FilePickerView(filePath: $gameFormViewModel.header, type: .image)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -132,7 +131,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Cover")
                     .frame(maxWidth: 80, alignment: .trailing)
-                FilePickerView(filePath: $viewModel.cover, type: .image)
+                FilePickerView(filePath: $gameFormViewModel.cover, type: .image)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -141,7 +140,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Release Date")
                     .frame(maxWidth: 80, alignment: .trailing)
-                DatePicker("", selection: $viewModel.releaseDate, displayedComponents: .date)
+                DatePicker("", selection: $gameFormViewModel.releaseDate, displayedComponents: .date)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .labelsHidden()
             }
@@ -151,7 +150,7 @@ struct GameFormView: View {
             GridRow {
                 Text("IGDB ID")
                     .frame(maxWidth: 80, alignment: .trailing)
-                TextField("", text: Binding(get: { viewModel.igdbIDText }, set: { viewModel.igdbIDText = $0 }), axis: .vertical)
+                TextField("", text: Binding(get: { gameFormViewModel.igdbIDText }, set: { gameFormViewModel.igdbIDText = $0 }), axis: .vertical)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -166,7 +165,7 @@ struct GameFormView: View {
 
             // Save game button
             Button(action: {
-                viewModel.saveGame()
+                gameFormViewModel.saveGame()
                 dismiss()
             }, label: {
                 Text("Save Game")

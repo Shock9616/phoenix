@@ -13,10 +13,11 @@ import SwiftUI
 /// and edit buttons
 ///
 /// Parameters:
-/// - viewModel: The view model for communicating with the app's
-/// backend
+/// - gameViewModel: The view model for communicating with the app's backend
+/// - settingsViewModel: The view model that handles the app's global settings
 struct GameDetailView: View {
-    @ObservedObject var viewModel: GameViewModel
+    @ObservedObject var gameViewModel: GameViewModel
+    @ObservedObject var settingsViewModel: SettingsViewModel
     @State private var formViewModel: GameFormViewModel?
     @State private var gameRating: Float = 0.0
 
@@ -24,7 +25,7 @@ struct GameDetailView: View {
         ScrollView {
             // ========== Header ==========
 
-            HeaderView(image: viewModel.selectedGameHeader, height: 450)
+            HeaderView(image: gameViewModel.selectedGameHeader, height: 450)
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.horizontal)
 
@@ -35,18 +36,18 @@ struct GameDetailView: View {
                 HStack {
                     // Play/Stop button
                     ControlButtonView(action: {
-                        if let game = viewModel.selectedGame {
-                            switch viewModel.actionButtonState {
+                        if let game = gameViewModel.selectedGame {
+                            switch gameViewModel.actionButtonState {
                                 case .play:
-                                    viewModel.launchGame(game)
+                                    gameViewModel.launchGame(game)
                                 case .stop:
-                                    viewModel.killGame(game)
+                                    gameViewModel.killGame(game)
                             }
                         }
                     }, label: {
                         HStack {
-                            Image(systemName: viewModel.actionButtonState == .play ? "play.fill" : "stop.fill")
-                            Text(viewModel.actionButtonState == .play ? "Play" : "Stop")
+                            Image(systemName: gameViewModel.actionButtonState == .play ? "play.fill" : "stop.fill")
+                            Text(gameViewModel.actionButtonState == .play ? "Play" : "Stop")
                         }
                         .frame(width: 160, height: 50)
                     })
@@ -54,10 +55,10 @@ struct GameDetailView: View {
 
                     // Edit game button
                     ControlButtonView(action: {
-                        guard let selected = viewModel.selectedGame else { return }
+                        guard let selected = gameViewModel.selectedGame else { return }
                         formViewModel = GameFormViewModel(mode: .edit(existing: selected))
                         formViewModel?.onSave = { updatedGame in
-                            viewModel.updateGame(updatedGame)
+                            gameViewModel.updateGame(updatedGame)
                         }
                     }, label: {
                         Image(systemName: "pencil")
@@ -65,22 +66,24 @@ struct GameDetailView: View {
                     })
                     .conditionalTint(.accentColor)
                     .sheet(item: $formViewModel) { vm in
-                        GameFormView(viewModel: vm)
+                        GameFormView(gameFormViewModel: vm)
                             .frame(width: 800)
                             .padding()
                     }
 
                     // Star Rating
-                    StarRatingView(rating: $gameRating)
-                        .onAppear {
-                            self.gameRating = viewModel.selectedGameRating
-                        }
-                        .onChange(of: viewModel.selectedGameIDs) {
-                            self.gameRating = viewModel.selectedGameRating
-                        }
-                        .onChange(of: gameRating) {
-                            viewModel.updateRating(gameRating)
-                        }
+                    if settingsViewModel.showStarRating {
+                        StarRatingView(rating: $gameRating)
+                            .onAppear {
+                                self.gameRating = gameViewModel.selectedGameRating
+                            }
+                            .onChange(of: gameViewModel.selectedGameIDs) {
+                                self.gameRating = gameViewModel.selectedGameRating
+                            }
+                            .onChange(of: gameRating) {
+                                gameViewModel.updateRating(gameRating)
+                            }
+                    }
 
                     Spacer()
                 }
@@ -89,13 +92,13 @@ struct GameDetailView: View {
                 // ---------- Details ----------
                 HStack(alignment: .top) {
                     VStack {
-                        DescriptionView(viewModel.selectedGameDescription ?? "")
+                        DescriptionView(gameViewModel.selectedGameDescription ?? "")
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(.bottom, 8)
-                        ImageCarouselView(images: viewModel.selectedGameScreenshots)
+                        ImageCarouselView(images: gameViewModel.selectedGameScreenshots)
                             .frame(height: 200)
                     }
-                    MetadataView(viewModel.selectedGameMetadata)
+                    MetadataView(gameViewModel.selectedGameMetadata)
                         .fixedSize()
                 }
             }

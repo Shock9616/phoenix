@@ -7,16 +7,24 @@
 
 import SwiftUI
 
+/// The view for the context menu shown when right-clicking a game in the game
+/// list
+///
+/// - Parameters:
+/// - game: The game to be operated on
+/// - gameViewModel: The view model for communicating with the app's backend
+/// - onEditName: A closure to be executed when the user edits the selected
+/// game's name
 struct GameContextMenuView: View {
     let game: Game
-    let viewModel: GameViewModel
+    let gameViewModel: GameViewModel
     let onEditName: () -> Void
     @State private var formViewModel: GameFormViewModel?
 
     var body: some View {
         // Favorite game(s) button
         Button(action: {
-            viewModel.toggleGamesFavorite(viewModel.selectedGames)
+            gameViewModel.toggleGamesFavorite(gameViewModel.selectedGames)
         }, label: {
             if #available(macOS 26.0, *) {
                 Image(systemName: game.isFavorite ? "star.slash" : "star")
@@ -26,7 +34,7 @@ struct GameContextMenuView: View {
 
         // Hide game(s) button
         Button(action: {
-            viewModel.hideGames(viewModel.selectedGames)
+            gameViewModel.hideGames(gameViewModel.selectedGames)
         }, label: {
             if #available(macOS 26.0, *) {
                 Image(systemName: "eye.slash")
@@ -36,7 +44,7 @@ struct GameContextMenuView: View {
 
         // Delete game(s) button
         Button(action: {
-            viewModel.deleteGames(viewModel.selectedGames)
+            gameViewModel.deleteGames(gameViewModel.selectedGames)
         }, label: {
             if #available(macOS 26.0, *) {
                 Image(systemName: "trash")
@@ -44,7 +52,7 @@ struct GameContextMenuView: View {
             Text("Delete")
         })
 
-        if viewModel.selectedGames.count == 1 {
+        if gameViewModel.selectedGames.count == 1 {
             // Rename and change icon only available for single selection
             Divider()
 
@@ -58,7 +66,7 @@ struct GameContextMenuView: View {
 
             // Change icon button
             Button(action: {
-                viewModel.promptForNewIcon(for: game)
+                gameViewModel.promptForNewIcon(for: game)
             }, label: {
                 if #available(macOS 26.0, *) {
                     Image(systemName: "square.dashed")
@@ -73,7 +81,7 @@ struct GameContextMenuView: View {
         Menu(content: {
             ForEach(Platform.allCases) { platform in
                 Button(action: {
-                    viewModel.editGamesPlatform(viewModel.selectedGames, platform)
+                    gameViewModel.editGamesPlatform(gameViewModel.selectedGames, platform)
                 }, label: {
                     Text(platform.displayName)
                 })
@@ -89,7 +97,7 @@ struct GameContextMenuView: View {
         Menu(content: {
             ForEach(Status.allCases) { status in
                 Button(action: {
-                    viewModel.editGamesStatus(viewModel.selectedGames, status)
+                    gameViewModel.editGamesStatus(gameViewModel.selectedGames, status)
                 }, label: {
                     Text(status.displayName)
                 })

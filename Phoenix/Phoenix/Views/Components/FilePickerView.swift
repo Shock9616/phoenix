@@ -8,8 +8,15 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// The view responsible for picking files, mainly inside the GameFormView
+///
+/// Presented as a browse button followed by the name of the selected file, or
+/// instructions to provide one
+///
+/// - Parameters:
+/// - filePath: The path to the selected file, or nil
+/// - type: The type of file that may be selected
 struct FilePickerView: View {
-//    let title: String
     @Binding var filePath: URL?
     let type: UTType
     
@@ -18,7 +25,6 @@ struct FilePickerView: View {
     
     var body: some View {
         HStack {
-//            Text(title)
             Button("Browse") {
                 isPicking = true
             }
@@ -43,6 +49,10 @@ struct FilePickerView: View {
         }
     }
     
+    /// Handle file importing
+    ///
+    /// - Parameters:
+    /// - result: The result of the import
     private func handleFileImport(_ result: Result<[URL], Error>) {
         do {
             let selectedURL = try result.get().first
@@ -54,6 +64,12 @@ struct FilePickerView: View {
         }
     }
     
+    /// Handle a file being imported via drag-and-drop
+    ///
+    /// - Parameters:
+    /// - providers: The providers for conveying file data when drag-and-dropped
+    ///
+    /// - Returns: True if the drop is successful, otherwise false
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
         guard let provider = providers.first else { return false }
         
@@ -75,6 +91,12 @@ struct FilePickerView: View {
 }
 
 extension URL {
+    /// Check if the file at the given url conform to the given type
+    ///
+    /// - Parameters:
+    /// - type: The type to check for conformity
+    ///
+    /// - Returns: True if the file conforms to the given type, otherwise false
     func conforms(to type: UTType) -> Bool {
         (try? resourceValues(forKeys: [.contentTypeKey]))?.contentType?.conforms(to: type) == true
     }

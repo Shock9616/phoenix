@@ -10,23 +10,24 @@ import SwiftUI
 /// The root view of the app
 ///
 /// - Parameters:
-/// - viewModel: The view model for communicating with the app's
-/// backend
+/// - gameViewModel: The view model for communicating with the app's backend
+/// - settingsViewModel: The view model that handles the app's global settings
 struct PhoenixRootView: View {
-    @ObservedObject var viewModel: GameViewModel
+    @ObservedObject var gameViewModel: GameViewModel
+    @ObservedObject var settingsViewModel: SettingsViewModel
 
     var body: some View {
         NavigationSplitView {
-            GameListView(viewModel: viewModel)
-                .toolbar { ToolbarView(viewModel: viewModel) }
+            GameListView(gameViewModel: gameViewModel, settingsViewModel: settingsViewModel)
+                .toolbar { ToolbarView(gameViewModel: gameViewModel) }
                 .frame(minWidth: 190)
         } detail: {
-            if viewModel.selectedGames.count == 1 {
+            if gameViewModel.selectedGames.count == 1 {
                 // If one game is selected
-                GameDetailView(viewModel: viewModel)
-            } else if viewModel.selectedGames.count > 1 {
+                GameDetailView(gameViewModel: gameViewModel, settingsViewModel: settingsViewModel)
+            } else if gameViewModel.selectedGames.count > 1 {
                 // If multiple games are selected
-                MultipleGamesView(viewModel: viewModel)
+                MultipleGamesView(gameViewModel: gameViewModel)
             }
         }
         .navigationTitle(selectedGameName)
@@ -35,10 +36,10 @@ struct PhoenixRootView: View {
     /// Get the name of the selected game, or return default names
     /// for when multiple/no games are selected
     private var selectedGameName: String {
-        if viewModel.selectedGames.count > 1 {
+        if gameViewModel.selectedGames.count > 1 {
             // If multiple games are selected
             return "Games"
-        } else if let selectedGame = viewModel.selectedGame,
+        } else if let selectedGame = gameViewModel.selectedGame,
                   let name = selectedGame.name
         {
             // If one game is selected
@@ -51,6 +52,6 @@ struct PhoenixRootView: View {
 }
 
 #Preview {
-    PhoenixRootView(viewModel: GameViewModel())
+    PhoenixRootView(gameViewModel: GameViewModel(), settingsViewModel: SettingsViewModel())
         .frame(width: 800, height: 600)
 }
