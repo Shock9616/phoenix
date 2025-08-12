@@ -162,6 +162,7 @@ struct GameFormView: View {
             Button(action: {}, label: {
                 Text("Fetch Metadata")
             })
+            .disabled(true); #warning("TODO: Implement metadata fetching")
 
             // Save game button
             Button(action: {

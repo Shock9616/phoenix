@@ -16,25 +16,20 @@ import SwiftUI
 /// backend
 struct ToolbarView: ToolbarContent {
     @ObservedObject var gameViewModel: GameViewModel
-    @State private var formViewModel: GameFormViewModel?
+    @EnvironmentObject var sheetCoordinator: SheetCoordinator
 
     var body: some ToolbarContent {
         // Add game button
         ToolbarItem(placement: .primaryAction) {
             // Add game button
             Button(action: {
-                formViewModel = GameFormViewModel(mode: .add)
-                formViewModel?.onSave = { updatedGame in
+                sheetCoordinator.formViewModel = GameFormViewModel(mode: .add)
+                sheetCoordinator.formViewModel?.onSave = { updatedGame in
                     gameViewModel.addGame(updatedGame)
                 }
             }, label: {
                 Label(String(localized: "file_AddGame"), systemImage: "plus")
             })
-            .sheet(item: $formViewModel) { vm in
-                GameFormView(gameFormViewModel: vm)
-                    .frame(width: 800)
-                    .padding()
-            }
         }
         ToolbarItem(placement: .primaryAction) {
             Picker("Sort By", selection: $gameViewModel.sortMode) {

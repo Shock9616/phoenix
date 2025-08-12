@@ -18,7 +18,7 @@ import SwiftUI
 struct GameDetailView: View {
     @ObservedObject var gameViewModel: GameViewModel
     @ObservedObject var settingsViewModel: SettingsViewModel
-    @State private var formViewModel: GameFormViewModel?
+    @EnvironmentObject var sheetCoordinator: SheetCoordinator
     @State private var gameRating: Float = 0.0
 
     var body: some View {
@@ -40,8 +40,10 @@ struct GameDetailView: View {
                             switch gameViewModel.actionButtonState {
                                 case .play:
                                     gameViewModel.launchGame(game)
+                                    AppEnvironment.logger.log("Launching game '\(game.name ?? "Unnamed")'", level: .info)
                                 case .stop:
                                     gameViewModel.killGame(game)
+                                    AppEnvironment.logger.log("Killing game '\(game.name ?? "Unnamed")'", level: .info)
                             }
                         }
                     }, label: {
@@ -56,8 +58,8 @@ struct GameDetailView: View {
                     // Edit game button
                     ControlButtonView(action: {
                         guard let selected = gameViewModel.selectedGame else { return }
-                        formViewModel = GameFormViewModel(mode: .edit(existing: selected))
-                        formViewModel?.onSave = { updatedGame in
+                        sheetCoordinator.formViewModel = GameFormViewModel(mode: .edit(existing: selected))
+                        sheetCoordinator.formViewModel?.onSave = { updatedGame in
                             gameViewModel.updateGame(updatedGame)
                         }
                     }, label: {
@@ -65,11 +67,6 @@ struct GameDetailView: View {
                             .frame(width: 35, height: 50)
                     })
                     .conditionalTint(.accentColor)
-                    .sheet(item: $formViewModel) { vm in
-                        GameFormView(gameFormViewModel: vm)
-                            .frame(width: 800)
-                            .padding()
-                    }
 
                     // Star Rating
                     if settingsViewModel.showStarRating {

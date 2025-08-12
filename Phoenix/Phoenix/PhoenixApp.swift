@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+internal import Combine
 
 @main
 struct PhoenixApp: App {
     @StateObject var gameViewModel = GameViewModel()
     @StateObject var settingsViewModel = SettingsViewModel()
+    @StateObject var sheetCoordinator = SheetCoordinator()
 
     // Set app logger
     private let logger = AppEnvironment.logger
@@ -24,14 +26,20 @@ struct PhoenixApp: App {
         WindowGroup {
             PhoenixRootView(gameViewModel: gameViewModel, settingsViewModel: settingsViewModel)
                 .frame(minWidth: 835, minHeight: 485)
+                .environmentObject(sheetCoordinator)
         }
         .commands {
             MenuCommands(gameViewModel: gameViewModel)
         }
-        
+        .environmentObject(sheetCoordinator)
+
         Settings {
-            PhoenixSettingsView(settingsViewModel: settingsViewModel)
+            PhoenixSettingsView(gameViewModel: gameViewModel, settingsViewModel: settingsViewModel)
                 .frame(width: 500, height: 300)
         }
     }
+}
+
+final class SheetCoordinator: ObservableObject {
+    @Published var formViewModel: GameFormViewModel?
 }

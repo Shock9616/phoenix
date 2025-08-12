@@ -15,6 +15,7 @@ import SwiftUI
 struct PhoenixRootView: View {
     @ObservedObject var gameViewModel: GameViewModel
     @ObservedObject var settingsViewModel: SettingsViewModel
+    @EnvironmentObject var sheetCoordinator: SheetCoordinator
 
     var body: some View {
         NavigationSplitView {
@@ -31,6 +32,11 @@ struct PhoenixRootView: View {
             }
         }
         .navigationTitle(selectedGameName)
+        .sheet(item: $sheetCoordinator.formViewModel) { vm in
+            GameFormView(gameFormViewModel: vm)
+                .frame(width: 800)
+                .padding()
+        }
     }
 
     /// Get the name of the selected game, or return default names
