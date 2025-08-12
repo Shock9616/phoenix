@@ -117,7 +117,7 @@ class GameViewModel: ObservableObject {
         guard let iconPath = selectedGame?.icon,
               let icon = loadImage(filePath: iconPath)
         else {
-            logger.log("Using placeholder icon for \(selectedGameName ?? "Unknown Game")", level: .info)
+            logger.log("Using placeholder icon for \(selectedGameName ?? "Unknown Game")", level: .debug)
             return Image("PlaceholderIcon")
         }
         return Image(nsImage: icon)
@@ -128,7 +128,7 @@ class GameViewModel: ObservableObject {
         guard let headerPath = selectedGame?.header,
               let header = loadImage(filePath: headerPath)
         else {
-            logger.log("Using placeholder header image for \(selectedGameName ?? "Unknown Game")", level: .info)
+            logger.log("Using placeholder header image for \(selectedGameName ?? "Unknown Game")", level: .debug)
             return Image("PlaceholderImage")
         }
         return Image(nsImage: header)
@@ -139,7 +139,7 @@ class GameViewModel: ObservableObject {
         guard let coverPath = selectedGame?.cover,
               let cover = loadImage(filePath: coverPath)
         else {
-            logger.log("Using placeholder cover image for \(selectedGameName ?? "Unknown Game")", level: .info)
+            logger.log("Using placeholder cover image for \(selectedGameName ?? "Unknown Game")", level: .debug)
             return Image("PlaceholderImage")
         }
         return Image(nsImage: cover)

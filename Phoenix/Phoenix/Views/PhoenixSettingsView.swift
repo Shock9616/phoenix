@@ -128,6 +128,10 @@ struct AppearanceSettingsView: View {
     }
 }
 
+/// The view for the app's hidden games tab
+///
+/// - Parameters:
+/// - settingsViewModel: The view model that handles the app's global settings
 struct HiddenGamesView: View {
     @ObservedObject var gameViewModel: GameViewModel
 
