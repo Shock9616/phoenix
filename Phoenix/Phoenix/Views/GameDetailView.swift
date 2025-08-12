@@ -40,10 +40,8 @@ struct GameDetailView: View {
                             switch gameViewModel.actionButtonState {
                                 case .play:
                                     gameViewModel.launchGame(game)
-                                    AppEnvironment.logger.log("Launching game '\(game.name ?? "Unnamed")'", level: .info)
                                 case .stop:
                                     gameViewModel.killGame(game)
-                                    AppEnvironment.logger.log("Killing game '\(game.name ?? "Unnamed")'", level: .info)
                             }
                         }
                     }, label: {

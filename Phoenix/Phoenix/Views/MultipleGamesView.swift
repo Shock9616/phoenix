@@ -56,6 +56,6 @@ struct MultipleGamesView: View {
             }
             .buttonStyle(PlainButtonStyle())
         }
-        .foregroundColor(.gray)
+        .foregroundColor(.secondary)
     }
 }

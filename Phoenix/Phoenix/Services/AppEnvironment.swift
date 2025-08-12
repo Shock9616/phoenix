@@ -9,7 +9,7 @@ import Foundation
 
 /// Global environment struct for holding app-wide dependencies such
 /// as logging
-final class AppEnvironment {
+enum AppEnvironment {
     static let logger: Logging = {
         #if DEBUG
         return ConsoleLogger()

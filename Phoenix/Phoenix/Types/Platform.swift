@@ -9,17 +9,23 @@ import Foundation
 
 /// An enum representing the platform a game is for
 enum Platform: Comparable, Identifiable, CaseIterable {
-    case mac
-    case steam
-    case gog
-    case pc
-    case psx
-    case gba
-    case wii
-    case snes
-    case xbox
-    case nx
-    case other
+    case mac, steam, gog, pc, psx, gba, wii, snes, xbox, nx, other
+
+    init(fromDisplayName name: String) {
+        switch name {
+            case Platform.mac.displayName: self = .mac
+            case Platform.steam.displayName: self = .steam
+            case Platform.gog.displayName: self = .gog
+            case Platform.pc.displayName: self = .pc
+            case Platform.psx.displayName: self = .psx
+            case Platform.gba.displayName: self = .gba
+            case Platform.wii.displayName: self = .wii
+            case Platform.snes.displayName: self = .snes
+            case Platform.xbox.displayName: self = .xbox
+            case Platform.nx.displayName: self = .nx
+            default: self = .other
+        }
+    }
 
     var id: Platform { self }
 

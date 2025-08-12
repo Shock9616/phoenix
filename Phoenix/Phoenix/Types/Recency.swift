@@ -11,6 +11,18 @@ import Foundation
 enum Recency: Comparable {
     case day, week, month, three_months, six_months, year, never
 
+    init(fromDisplayName name: String) {
+        switch name {
+            case Recency.day.displayName: self = .day
+            case Recency.week.displayName: self = .week
+            case Recency.month.displayName: self = .month
+            case Recency.three_months.displayName: self = .three_months
+            case Recency.six_months.displayName: self = .six_months
+            case Recency.year.displayName: self = .year
+            default: self = .never
+        }
+    }
+
     var id: Recency { self }
 
     var displayName: String {
@@ -22,13 +34,6 @@ enum Recency: Comparable {
             case .six_months: return "Last 6 Months"
             case .year: return "This Year"
             case .never: return "Never"
-//            case .day: return String(localized: "recency_Today")
-//            case .week: return String(localized: "recency_ThisWeek")
-//            case .month: return String(localized: "recency_ThisMonth")
-//            case .three_months: return String(localized: "recency_Last3Months")
-//            case .six_months: return String(localized: "recency_Last6Months")
-//            case .year: return String(localized: "recency_ThisYear")
-//            case .never: return String(localized: "recency_Never")
         }
     }
 

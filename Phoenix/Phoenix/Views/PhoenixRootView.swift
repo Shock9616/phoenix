@@ -29,6 +29,8 @@ struct PhoenixRootView: View {
             } else if gameViewModel.selectedGames.count > 1 {
                 // If multiple games are selected
                 MultipleGamesView(gameViewModel: gameViewModel)
+            } else {
+                NoGamesView()
             }
         }
         .navigationTitle(selectedGameName)

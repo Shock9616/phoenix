@@ -34,11 +34,14 @@ protocol GameLaunching {
 /// A service to manage launching games
 struct GameLauncherService: GameLaunching {
     func launch(_ game: Game) throws -> GameProcessHandle? {
-        guard let method = game.platform.inferredLaunchMethod(for: game) else {
-            throw GameLaunchingError.noLauncherFound(for: game)
+        var method = game.platform.inferredLaunchMethod(for: game)
+
+        if game.launcher != nil, game.launcher != "" {
+            // Allow user to override launch command
+            method = .shell(command: game.launcher!)
         }
 
-        return try launchWithMethod(method)
+        return try launchWithMethod(method!)
     }
 
     /// Launch a game with the appropriate method and return a
@@ -149,7 +152,7 @@ struct GameLauncherService: GameLaunching {
 enum GameLaunchingError: Error, CustomStringConvertible {
     case noLauncherFound(for: Game)
 
-    public var description: String {
+    var description: String {
         switch self {
             case .noLauncherFound(for: let game):
                 return "No launcher found for game: \(game)"

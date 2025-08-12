@@ -42,7 +42,7 @@ class GameFormViewModel: ObservableObject, Identifiable {
     private var lastPlayed: Date?
 
     private let mode: GameFormMode
-    var onSave: ((Game) -> Void)? = nil
+    var onSave: ((Game) -> Void)?
 
     init(mode: GameFormMode) {
         self.mode = mode
@@ -90,6 +90,30 @@ class GameFormViewModel: ObservableObject, Identifiable {
         }
     }
 
+    // Convert the developers array to a string and back
+    var developersText: String {
+        get {
+            developers.joined(separator: "\n")
+        } set {
+            developers = newValue
+                .components(separatedBy: .newlines)
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+        }
+    }
+
+    // Convert the publishers array to a string and back
+    var publishersText: String {
+        get {
+            publishers.joined(separator: "\n")
+        } set {
+            publishers = newValue
+                .components(separatedBy: .newlines)
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+        }
+    }
+
     // Convert the IGDB ID to a string and back
     var igdbIDText: String {
         get {
@@ -101,8 +125,14 @@ class GameFormViewModel: ObservableObject, Identifiable {
 
     /// Create a new game object with the updated values and save
     func saveGame() {
+        let newUUID = UUID()
+
+        let newIcon = cacheImage(originalURL: icon, gameID: gameID ?? newUUID, imageType: "icon")
+        let newHeader = cacheImage(originalURL: header, gameID: gameID ?? newUUID, imageType: "header")
+        let newCover = cacheImage(originalURL: cover, gameID: gameID ?? newUUID, imageType: "cover")
+
         let game = Game(
-            id: gameID ?? UUID(),
+            id: gameID ?? newUUID,
             steamID: steamID,
             igdbID: igdbID,
             name: name,
@@ -113,9 +143,9 @@ class GameFormViewModel: ObservableObject, Identifiable {
             isFavorite: isFavorite,
             gameExecutable: gameExecutable,
             launcher: launcher,
-            icon: icon,
-            header: header,
-            cover: cover,
+            icon: newIcon,
+            header: newHeader,
+            cover: newCover,
             screenshots: screenshots,
             description: description,
             genres: genres,

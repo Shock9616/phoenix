@@ -86,16 +86,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Game")
                     .frame(maxWidth: 80, alignment: .trailing)
-                FilePickerView(filePath: $gameFormViewModel.gameExecutable, type: .data)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.vertical, 5)
-
-            // Command input
-            GridRow {
-                Text("Command")
-                    .frame(maxWidth: 80, alignment: .trailing)
-                TextField("", text: $gameFormViewModel.launcher)
+                FilePickerView(filePath: $gameFormViewModel.gameExecutable, type: .item)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -136,6 +127,24 @@ struct GameFormView: View {
             }
             .padding(.vertical, 5)
 
+            // Developers input
+            GridRow {
+                Text("Developers")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                TextField("", text: Binding(get: { gameFormViewModel.developersText }, set: { gameFormViewModel.developersText = $0 }), axis: .vertical)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
+            // Publishers input
+            GridRow {
+                Text("Publishers")
+                    .frame(maxWidth: 80, alignment: .trailing)
+                TextField("", text: Binding(get: { gameFormViewModel.publishersText }, set: { gameFormViewModel.publishersText = $0 }), axis: .vertical)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 5)
+
             // Release date input
             GridRow {
                 Text("Release Date")
@@ -154,6 +163,19 @@ struct GameFormView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
+
+            // Command input
+            DisclosureGroup("Advanced") {
+                Grid(alignment: .leading) {
+                    GridRow {
+                        Text("Command")
+                            .frame(maxWidth: 80, alignment: .trailing)
+                        TextField("", text: $gameFormViewModel.launcher, prompt: Text("Override defaualt launch command"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(.vertical, 5)
+                }
+            }
         }
         .padding()
 

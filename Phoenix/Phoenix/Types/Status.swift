@@ -11,6 +11,19 @@ import Foundation
 enum Status: Comparable, Identifiable, CaseIterable {
     case playing, shelved, occasional, backlog, beaten, completed, abandoned, none
 
+    init(fromDisplayName name: String) {
+        switch name {
+            case Status.playing.displayName: self = .playing
+            case Status.shelved.displayName: self = .shelved
+            case Status.occasional.displayName: self = .occasional
+            case Status.backlog.displayName: self = .backlog
+            case Status.beaten.displayName: self = .beaten
+            case Status.completed.displayName: self = .completed
+            case Status.abandoned.displayName: self = .abandoned
+            default: self = .none
+        }
+    }
+
     var id: Status { self }
 
     var displayName: String {
@@ -23,14 +36,6 @@ enum Status: Comparable, Identifiable, CaseIterable {
             case .completed: return "Completed"
             case .abandoned: return "Abandoned"
             case .none: return "None"
-//            case .playing: return String(localized: "status_Playing")
-//            case .shelved: return String(localized: "status_Shelved")
-//            case .occasional: return String(localized: "status_Occasional")
-//            case .backlog: return String(localized: "status_Backlog")
-//            case .beaten: return String(localized: "status_Beaten")
-//            case .completed: return String(localized: "status_Completed")
-//            case .abandoned: return String(localized: "status_Abandoned")
-//            case .none: return String(localized: "status_Other")
         }
     }
 

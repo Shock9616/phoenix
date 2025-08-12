@@ -378,6 +378,7 @@ class GameViewModel: ObservableObject {
         
         gameModel.games[index].rating = rating
         
+        saveGames(gameModel.games)
         logger.log("Updated rating of '\(gameModel.games[index].name ?? "Unknown Game")' to \(rating)", level: .info)
     }
     
@@ -392,6 +393,7 @@ class GameViewModel: ObservableObject {
         
         gameModel.games[index] = game
         
+        saveGames(gameModel.games)
         logger.log("Updated game '\(game.name ?? "Unknown Game")'", level: .info)
     }
     
@@ -403,6 +405,7 @@ class GameViewModel: ObservableObject {
         gameModel.games.append(game)
         gameModel.selectedGameIDs = [game.id]
         
+        saveGames(gameModel.games)
         logger.log("Added game '\(game.name ?? "Unknown Game")'", level: .info)
     }
     
@@ -451,6 +454,7 @@ class GameViewModel: ObservableObject {
             if let index = gameModel.games.firstIndex(of: game) {
                 gameModel.games[index].isFavorite.toggle()
                 
+                saveGames(gameModel.games)
                 logger.log("Game '\(game.name ?? "Unknown Game")' \(gameModel.games[index].isFavorite ? "favorited" : "unfavorited")", level: .info)
             }
         }
@@ -481,6 +485,7 @@ class GameViewModel: ObservableObject {
                 }
             }
             
+            saveGames(gameModel.games)
             logger.log("Game '\(game.name ?? "Unknown Game")' hidden", level: .info)
         }
     }
@@ -510,6 +515,7 @@ class GameViewModel: ObservableObject {
                 }
             }
             
+            saveGames(gameModel.games)
             logger.log("Game '\(game.name ?? "Unknown Game")' deleted", level: .info)
         }
     }
@@ -529,8 +535,13 @@ class GameViewModel: ObservableObject {
     /// - gmae: The game to be renamed
     func commitNameChange(_ newName: String, for game: Game) {
         guard let index = gameModel.games.firstIndex(where: { $0.id == game.id }) else { return }
+        let oldName = gameModel.games[index].name
+        
         gameModel.games[index].name = newName
         renamingGameID = nil
+        
+        saveGames(gameModel.games)
+        logger.log("Renamed game '\(oldName ?? "Unnamed")' to '\(newName)'", level: .info)
     }
     
     /// Open a file selector to select a new game icon
@@ -557,6 +568,8 @@ class GameViewModel: ObservableObject {
     func updateIcon(for game: Game, with url: URL) {
         guard let index = gameModel.games.firstIndex(where: { $0.id == game.id }) else { return }
         gameModel.games[index].icon = url
+        
+        saveGames(gameModel.games)
         logger.log("Updated icon for '\(game.name ?? "Unknown Game")'", level: .info)
     }
     
@@ -569,6 +582,8 @@ class GameViewModel: ObservableObject {
         for game in games {
             guard let index = gameModel.games.firstIndex(where: { $0.id == game.id }) else { return }
             gameModel.games[index].platform = platform
+            
+            saveGames(gameModel.games)
             logger.log("Updated platform for '\(game.name ?? "Unknown Game")' to \(platform.displayName)", level: .info)
         }
     }
@@ -582,6 +597,8 @@ class GameViewModel: ObservableObject {
         for game in games {
             guard let index = gameModel.games.firstIndex(where: { $0.id == game.id }) else { return }
             gameModel.games[index].status = status
+            
+            saveGames(gameModel.games)
             logger.log("Updated status for '\(game.name ?? "Unknown Game")' to \(status.displayName)", level: .info)
         }
     }
