@@ -34,7 +34,7 @@ struct GameContextMenuView: View {
 
         // Hide game(s) button
         Button(action: {
-            gameViewModel.hideGames(gameViewModel.selectedGames)
+            gameViewModel.toggleGamesHidden(gameViewModel.selectedGames)
         }, label: {
             if #available(macOS 26.0, *) {
                 Image(systemName: "eye.slash")

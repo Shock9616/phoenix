@@ -30,7 +30,7 @@ struct MultipleGamesView: View {
             HStack {
                 // Hide games button
                 Button(action: {
-                    gameViewModel.hideGames(gameViewModel.selectedGames)
+                    gameViewModel.toggleGamesHidden(gameViewModel.selectedGames)
                 }, label: {
                     Text("Hide Games")
                         .padding(.horizontal, 5)

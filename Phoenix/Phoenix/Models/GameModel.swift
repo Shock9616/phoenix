@@ -57,6 +57,24 @@ func loadGames() -> [Game] {
             publishers: ["Supergiant Games"]
         ),
         Game(
+            igdbID: 28512,
+            name: "Risk of Rain 2",
+            platform: .pc,
+            status: .playing,
+            recency: .month,
+            isHidden: true,
+            isFavorite: true,
+            icon: URL(filePath: "/Users/kalebrosborough/Desktop/Phoenix Data Backup/cachedImages/72703369-2554-4977-A0CF-1F0ACCE16E30_icon.jpg"),
+            header: URL(filePath: "/Users/kalebrosborough/Desktop/Phoenix Data Backup/cachedImages/72703369-2554-4977-A0CF-1F0ACCE16E30_header.jpg"),
+            description: "Risk of Rain 2 follows the crew of UES: Safe Travels as they try to find UES: Contact Light and any survivors along their path. They have to try and survive the hostile wildlife and environment as difficulty increases over time, navigating Petrichor V via the teleporters strewn across the entire planet. The crew loop endlessly through many distinct environments, but end upon the moon to defeat the final boss.\n\nWith each run, you’ll learn the patterns of your foes, and even the longest odds can be overcome with enough skill. A unique scaling system means both you and your foes limitlessly increase in power over the course of a game–what once was a bossfight will in time become a common enemy.\n\nMyriad survivors, items, enemies, and bosses return to Risk 2, and many new ones are joining the fight. Brand new survivors like the Artificer and MUL-T debut alongside classic survivors such as the Engineer, Huntress, and–of course–the Commando. With over 75 items to unlock and exploit, each run will keep you cleverly strategizing your way out of sticky situations.",
+            genres: ["Shooter", "Adventure", "Indie"],
+            rating: 5.0,
+            releaseDate: formatter.date(from: "08/11/2020"),
+            lastPlayed: formatter.date(from: "08/27/2024"),
+            developers: ["Hopoo Games"],
+            publishers: ["Gearbox Publishing"]
+        ),
+        Game(
             igdbID: 27238,
             name: "AM2R",
             platform: .mac,

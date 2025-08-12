@@ -38,7 +38,7 @@ class GameViewModel: ObservableObject {
         gameModel.selectedGameIDs
     }
 
-    var lastSelectedGameID: UUID? = nil
+    var lastSelectedGameID: UUID?
     
     /// The first selected game
     var selectedGame: Game? {
@@ -217,7 +217,7 @@ class GameViewModel: ObservableObject {
         metadata.append(("Status", selectedGameStatus.displayName))
         
         // Rating
-        @AppStorage("showStarRating") var showStarRating: Bool = true
+        @AppStorage("showStarRating") var showStarRating = true
         if !showStarRating {
             metadata.append(("Rating", String(selectedGameRating)))
         }
@@ -442,10 +442,10 @@ class GameViewModel: ObservableObject {
         gameModel.runningGames.removeValue(forKey: game.id)
     }
     
-    /// Toggle the given game's 'isFavorite' parameter
+    /// Toggle the given games' 'isFavorite' parameter
     ///
     /// - Parameters:
-    /// - game: The game to be (un)favorited
+    /// - games: The games to be (un)favorited
     func toggleGamesFavorite(_ games: [Game]) {
         for game in games {
             if let index = gameModel.games.firstIndex(of: game) {
@@ -460,11 +460,11 @@ class GameViewModel: ObservableObject {
     ///
     /// - Parameters:
     /// - game: The game to be hidden
-    func hideGames(_ games: [Game]) {
+    func toggleGamesHidden(_ games: [Game]) {
         for game in games {
             guard let index = gameModel.games.firstIndex(of: game) else { return }
             
-            gameModel.games[index].isHidden = true
+            gameModel.games[index].isHidden.toggle()
             
             if selectedGameIDs.contains(game.id) {
                 // Try to find the nearest visible game to select

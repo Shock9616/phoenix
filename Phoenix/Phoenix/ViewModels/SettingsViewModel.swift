@@ -13,6 +13,10 @@ import SwiftUI
 class SettingsViewModel: ObservableObject {
     @Published var selectedTab: SettingsTab = .general
 
+    // General Settings
+    @AppStorage("fetchMetadata") var fetchMetadata: Bool = true
+    @AppStorage("fetchIcon") var fetchIcon: Bool = true
+
     // Appearance Settings
     @AppStorage("showStarRating") var showStarRating: Bool = true
     @AppStorage("showIcons") var showIcons: Bool = true

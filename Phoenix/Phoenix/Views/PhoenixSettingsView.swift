@@ -15,6 +15,7 @@ import SwiftUI
 /// - Parameters:
 /// - settingsViewModel: The view model that handles the app's global settings
 struct PhoenixSettingsView: View {
+    @ObservedObject var gameViewModel: GameViewModel
     @ObservedObject var settingsViewModel: SettingsViewModel
 
     var body: some View {
@@ -28,6 +29,11 @@ struct PhoenixSettingsView: View {
                 .tabItem {
                     Label("Appearance", systemImage: "paintpalette")
                 }
+
+            HiddenGamesView(gameViewModel: gameViewModel)
+                .tabItem {
+                    Label("Hidden Games", systemImage: "eye.slash.fill")
+                }
         }
     }
 }
@@ -40,7 +46,24 @@ struct GeneralSettingsView: View {
     @ObservedObject var settingsViewModel: SettingsViewModel
 
     var body: some View {
-        Text("Hello, world!")
+        Grid(alignment: .leading) {
+            GridRow {
+                Text("")
+                    .frame(maxWidth: 166, alignment: .trailing)
+                Toggle("Automatically fetch game metadata", isOn: $settingsViewModel.fetchMetadata)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .disabled(true); #warning("TODO: implement automatic metadata fetching")
+            }
+            .padding(.vertical, 5)
+
+            GridRow {
+                Text("")
+                    .frame(maxWidth: 166, alignment: .trailing)
+                Toggle("Automatically fetch game icon", isOn: $settingsViewModel.fetchIcon)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .disabled(true); #warning("TODO: implement automatic icon fetching")
+            }
+        }
     }
 }
 
@@ -57,6 +80,7 @@ struct AppearanceSettingsView: View {
                 Text("")
                     .frame(maxWidth: 166, alignment: .trailing)
                 Toggle("Show star rating", isOn: $settingsViewModel.showStarRating)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
 
@@ -104,6 +128,31 @@ struct AppearanceSettingsView: View {
     }
 }
 
+struct HiddenGamesView: View {
+    @ObservedObject var gameViewModel: GameViewModel
+
+    var body: some View {
+        List {
+            ForEach(gameViewModel.games.filter { $0.isHidden }) { game in
+                HStack {
+                    Text(game.name ?? "Unnamed")
+                    Spacer()
+                    Button(action: {
+                        gameViewModel.toggleGamesHidden([game])
+                    }, label: {
+                        Text("Show game")
+                    })
+                    Button(action: {
+                        gameViewModel.deleteGames([game])
+                    }, label: {
+                        Image(systemName: "trash")
+                    })
+                }
+            }
+        }
+    }
+}
+
 #Preview {
-    PhoenixSettingsView(settingsViewModel: SettingsViewModel())
+    PhoenixSettingsView(gameViewModel: GameViewModel(), settingsViewModel: SettingsViewModel())
 }
