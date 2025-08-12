@@ -12,10 +12,11 @@ import SwiftUI
 /// The view model that handles the app's global settings
 class SettingsViewModel: ObservableObject {
     @Published var selectedTab: SettingsTab = .general
-    
+
     // Appearance Settings
     @AppStorage("showStarRating") var showStarRating: Bool = true
     @AppStorage("showIcons") var showIcons: Bool = true
+    @AppStorage("iconSize") var iconSize: Double = 25
     @AppStorage("showGameCount") var showGameCount: Bool = true
 }
 

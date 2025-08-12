@@ -29,7 +29,7 @@ struct GameListItemView: View {
             if settingsViewModel.showIcons {
                 gameIcon
                     .resizable()
-                    .frame(width: 25, height: 25)
+                    .frame(width: settingsViewModel.iconSize, height: settingsViewModel.iconSize)
             }
             
             if gameViewModel.renamingGameID == game.id {
