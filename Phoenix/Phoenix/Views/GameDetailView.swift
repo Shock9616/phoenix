@@ -22,7 +22,7 @@ struct GameDetailView: View {
     @State private var gameRating: Float = 0.0
 
     var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             // ========== Header ==========
 
             HeaderView(image: gameViewModel.selectedGameHeader, height: 450)

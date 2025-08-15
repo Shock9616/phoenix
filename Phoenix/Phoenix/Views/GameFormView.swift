@@ -20,7 +20,7 @@ struct GameFormView: View {
         ZStack {
             Rectangle()
                 .frame(height: 100)
-                .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                .foregroundColor(Color(NSColor.quaternaryLabelColor))
             HStack {
                 if let iconPath = gameFormViewModel.icon, let icon = loadImage(filePath: iconPath) {
                     Image(nsImage: icon)
@@ -82,12 +82,19 @@ struct GameFormView: View {
             }
             .padding(.vertical, 5)
 
-            // Game executable input
+            // Game executable/steam id input
             GridRow {
-                Text("Game")
-                    .frame(maxWidth: 80, alignment: .trailing)
-                FilePickerView(filePath: $gameFormViewModel.gameExecutable, type: .item)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                if gameFormViewModel.platform == .steam {
+                    Text("Steam ID")
+                        .frame(maxWidth: 80, alignment: .trailing)
+                    TextField("", text: Binding(get: { gameFormViewModel.steamIDText }, set: { gameFormViewModel.steamIDText = $0 }), axis: .vertical)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    Text("Game")
+                        .frame(maxWidth: 80, alignment: .trailing)
+                    FilePickerView(filePath: $gameFormViewModel.gameExecutable, type: .item)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
             .padding(.vertical, 5)
 
@@ -104,7 +111,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Genres")
                     .frame(maxWidth: 80, alignment: .trailing)
-                TextField("", text: Binding(get: { gameFormViewModel.genresText }, set: { gameFormViewModel.genresText = $0 }), axis: .vertical)
+                TextField("", text: $gameFormViewModel.genresText, axis: .vertical)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -126,12 +133,13 @@ struct GameFormView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
+            .disabled(true)
 
             // Developers input
             GridRow {
                 Text("Developers")
                     .frame(maxWidth: 80, alignment: .trailing)
-                TextField("", text: Binding(get: { gameFormViewModel.developersText }, set: { gameFormViewModel.developersText = $0 }), axis: .vertical)
+                TextField("", text: $gameFormViewModel.developersText, axis: .vertical)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)
@@ -140,7 +148,7 @@ struct GameFormView: View {
             GridRow {
                 Text("Publishers")
                     .frame(maxWidth: 80, alignment: .trailing)
-                TextField("", text: Binding(get: { gameFormViewModel.publishersText }, set: { gameFormViewModel.publishersText = $0 }), axis: .vertical)
+                TextField("", text: $gameFormViewModel.publishersText, axis: .vertical)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 5)

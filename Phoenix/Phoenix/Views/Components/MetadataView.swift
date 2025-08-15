@@ -26,7 +26,7 @@ struct MetadataView: View {
     var body: some View {
         ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color(red: 0.20, green: 0.20, blue: 0.20))
+                .foregroundColor(Color(NSColor.quaternaryLabelColor))
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(metadata, id: \.0) { section, value in
                     MetadataSectionView(section: section, value: value)

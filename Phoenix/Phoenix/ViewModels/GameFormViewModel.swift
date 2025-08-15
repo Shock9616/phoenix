@@ -114,6 +114,15 @@ class GameFormViewModel: ObservableObject, Identifiable {
         }
     }
 
+    // Convert the Steam ID to a string and back
+    var steamIDText: String {
+        get {
+            String(steamID ?? 0)
+        } set {
+            steamID = Int(newValue)
+        }
+    }
+
     // Convert the IGDB ID to a string and back
     var igdbIDText: String {
         get {
