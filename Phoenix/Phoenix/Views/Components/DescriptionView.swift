@@ -23,9 +23,7 @@ struct DescriptionView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color(NSColor.quaternaryLabelColor))
+        GroupBox {
             ExpandableText(content)
                 .font(.system(size: 14.5))
                 .buttonFont(Font.system(size: 13))

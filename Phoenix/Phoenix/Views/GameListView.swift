@@ -18,7 +18,7 @@ import SwiftUI
 struct GameListView: View {
     @ObservedObject var gameViewModel: GameViewModel
     @ObservedObject var settingsViewModel: SettingsViewModel
-    
+
     @State private var selectedIDs: Set<UUID> = []
 
     /// The actual list object
@@ -45,8 +45,9 @@ struct GameListView: View {
     private var GameSectionsView: some View {
         ForEach(gameViewModel.displaySections) { section in // Sections
             Section(header: settingsViewModel.showGameCount
-                    ? Text("\(section.title) (\(section.games.count))")
-                    : Text(section.title)) {
+                ? Text("\(section.title) (\(section.games.count))")
+                : Text(section.title))
+            {
                 ForEach(section.games) { game in // Games in each section
                     GameRowView(game: game)
                 }

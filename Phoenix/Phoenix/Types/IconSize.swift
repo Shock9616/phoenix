@@ -9,8 +9,8 @@ import Foundation
 
 /// An enum representing the available icon sizes in the sidebar
 enum IconSize: Double, Identifiable, CaseIterable {
-    case small = 20
-    case medium = 30
+    case small = 24
+    case medium = 34
     case large = 40
 
     var id: IconSize { self }
