@@ -81,10 +81,10 @@ class GameFormViewModel: ObservableObject, Identifiable {
     // Convert the genres array to a string and back
     var genresText: String {
         get {
-            genres.joined(separator: "\n")
+            genres.joined(separator: ", ")
         } set {
             genres = newValue
-                .components(separatedBy: .newlines)
+                .components(separatedBy: ", ")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .filter { !$0.isEmpty }
         }
@@ -93,10 +93,10 @@ class GameFormViewModel: ObservableObject, Identifiable {
     // Convert the developers array to a string and back
     var developersText: String {
         get {
-            developers.joined(separator: "\n")
+            developers.joined(separator: ", ")
         } set {
             developers = newValue
-                .components(separatedBy: .newlines)
+                .components(separatedBy: ", ")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .filter { !$0.isEmpty }
         }
@@ -105,10 +105,10 @@ class GameFormViewModel: ObservableObject, Identifiable {
     // Convert the publishers array to a string and back
     var publishersText: String {
         get {
-            publishers.joined(separator: "\n")
+            publishers.joined(separator: ", ")
         } set {
             publishers = newValue
-                .components(separatedBy: .newlines)
+                .components(separatedBy: ", ")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .filter { !$0.isEmpty }
         }
