@@ -418,7 +418,12 @@ class GameViewModel: ObservableObject {
             logger.log("Launching game '\(game.name ?? "Unknown Game")'", level: .info)
             
             let gameProcess = try gameLauncher.launch(game)
-            guard let gameID = selectedGame?.id else { return }
+            let gameID = game.id
+
+            if let index = gameModel.games.firstIndex(where: { $0.id == gameID }) {
+                gameModel.games[index].lastPlayed = Date()
+                saveGames(gameModel.games)
+            }
             
             gameModel.runningGames[gameID] = gameProcess
         } catch {
