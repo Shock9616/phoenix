@@ -57,6 +57,12 @@ struct GameDetailView: View {
                         }
                     )
                     .conditionalTint(.accentColor)
+                    .alert(item: $gameViewModel.launchAlert) { alert in
+                        Alert(
+                            title: Text(alert.title),
+                            message: Text(alert.message)
+                        )
+                    }
 
                     // Edit game button
                     ControlButtonView(

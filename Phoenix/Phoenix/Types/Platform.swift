@@ -72,8 +72,9 @@ enum Platform: Comparable, Identifiable, CaseIterable {
             case .xbox:
                 guard let path = game.gameExecutable else { return nil }
                 return .shell(command: "'/Applications/Xemu.app/Contents/MacOS/xemu' -dvd_path '\(path.path(percentEncoded: false))'")
-            default:
-                return nil
+            case .other:
+                guard let launcher = game.launcher else { return nil }
+                return .shell(command: launcher)
         }
     }
 

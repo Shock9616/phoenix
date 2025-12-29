@@ -9,6 +9,12 @@ import SwiftUI
 import UniformTypeIdentifiers
 internal import Combine
 
+struct GameLaunchAlert: Identifiable {
+    let id = UUID()
+    let title: String
+    let message: String
+}
+
 /// The view model that communicates between the app's UI and the
 /// backend
 class GameViewModel: ObservableObject {
@@ -16,6 +22,7 @@ class GameViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var sortMode: SortMode = .platform
     @Published var renamingGameID: UUID? = nil
+    @Published var launchAlert: GameLaunchAlert?
     
     @AppStorage("storedSelectedGameID") private var storedSelectedGameIDString: String?
     
@@ -436,6 +443,15 @@ class GameViewModel: ObservableObject {
     /// - Parameters:
     /// - game: The game to be launched
     func launchGame(_ game: Game) {
+        if game.platform == .other, game.launcher?.isEmpty ?? true {
+            launchAlert = GameLaunchAlert(title: "Cannot Launch Game", message: """
+            This game is set to the \"Other\" platform but does not have a launcher commnad.
+            
+            Please choose a different platform or provide a launcher command.
+            """)
+            return
+        }
+        
         do {
             logger.log("Launching game '\(game.name ?? "Unknown Game")'", level: .info)
             
