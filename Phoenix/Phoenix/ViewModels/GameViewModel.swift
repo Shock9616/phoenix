@@ -17,6 +17,25 @@ class GameViewModel: ObservableObject {
     @Published var sortMode: SortMode = .platform
     @Published var renamingGameID: UUID? = nil
     
+    @AppStorage("storedSelectedGameID") private var storedSelectedGameIDString: String?
+    
+    private var persistedLastSelectedGameID: UUID? {
+        guard let string = storedSelectedGameIDString else { return nil }
+        return UUID(uuidString: string)
+    }
+    
+    private func restoreLastSelection() {
+        guard let savedID = persistedLastSelectedGameID, games.contains(where: { $0.id == savedID }) else {
+            if let firstGame = games.first {
+                gameModel.selectedGameIDs = [firstGame.id]
+                logger.log("Failed to restore previously selected game. Defaulting to first game", level: .debug)
+            }
+            return
+        }
+        gameModel.selectedGameIDs = [savedID]
+        logger.log("Restored previously selected game", level: .debug)
+    }
+    
     private let logger: Logging
     private let gameLauncher: GameLaunching
     
@@ -26,6 +45,8 @@ class GameViewModel: ObservableObject {
     ) {
         self.logger = logger
         self.gameLauncher = gameLauncher
+        
+        restoreLastSelection()
     }
     
     /// The full list of the user's games
@@ -362,6 +383,7 @@ class GameViewModel: ObservableObject {
     func selectGames(_ ids: Set<UUID>) {
         gameModel.selectedGameIDs = ids
         lastSelectedGameID = gameModel.selectedGameIDs.reversed().first
+        storedSelectedGameIDString = ids.first?.uuidString
         logger.log("Selected game(s) \(games.filter { ids.contains($0.id) }.compactMap { $0.name })", level: .debug)
     }
     
